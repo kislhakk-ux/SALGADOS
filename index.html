@@ -530,12 +530,12 @@
     }
     async function loadLiveCatalog() {
       const apiBase = window.NANE_CONFIG && window.NANE_CONFIG.API_BASE_URL;
-      if (!apiBase) return;
+      if (!apiBase) return false;
       try {
         const response = await fetch(apiBase.replace(/\/$/, '') + '/api/catalog', { cache: 'no-store' });
-        if (!response.ok) return;
+        if (!response.ok) return false;
         const catalog = await response.json();
-        if (!Array.isArray(catalog.products) || !Array.isArray(catalog.beverages)) return;
+        if (!Array.isArray(catalog.products) || !Array.isArray(catalog.beverages)) return false;
         products = catalog.products.filter(function(item) { return item.active !== false; });
         beverages = catalog.beverages.filter(function(item) { return item.active !== false; });
         if (Array.isArray(catalog.categories)) {
@@ -559,9 +559,19 @@
         beverageNotice.innerHTML = unpricedDrinks
           ? '<strong>Preços a definir</strong> · A disponibilidade e o valor serão confirmados pelo WhatsApp.'
           : '<strong>Preços atualizados</strong> · Valores exibidos por unidade.';
+        return true;
       } catch (error) {
         console.info('Catálogo online indisponível; mostrando os itens salvos no site.', error);
+        return false;
       }
+    }
+
+    async function keepCatalogInSync() {
+      const apiBase = window.NANE_CONFIG && window.NANE_CONFIG.API_BASE_URL;
+      if (!apiBase) return;
+      const loaded = await loadLiveCatalog();
+      // Recheck open storefronts periodically, and retry sooner if the free API is waking up.
+      window.setTimeout(keepCatalogInSync, loaded ? 30000 : 10000);
     }
 
     function money(value) {
@@ -704,7 +714,7 @@
     renderProducts('todos');
     renderBeverages('todos');
     updateOrder();
-    loadLiveCatalog();
+    keepCatalogInSync();
   </script>
 </body>
 </html>

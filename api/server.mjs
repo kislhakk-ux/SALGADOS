@@ -16,6 +16,9 @@ const seedPath = fileURLToPath(new URL('../catalog-seed.json', import.meta.url))
 const loginAttempts = new Map();
 const MAX_CATALOG_BYTES = 1_000_000;
 const MAX_IMAGE_BYTES = 1_450_000;
+const CATALOG_CACHE_TTL_MS = 10_000;
+let catalogCache = null;
+let catalogCacheExpiresAt = 0;
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -66,13 +69,21 @@ async function readRepoFile(repoPath) {
 }
 
 async function loadCatalog() {
+  if (catalogCache && Date.now() < catalogCacheExpiresAt) {
+    return JSON.parse(JSON.stringify(catalogCache));
+  }
+
+  let catalog;
   try {
     const file = await readRepoFile(catalogPath);
-    return JSON.parse(file.content.toString('utf8'));
+    catalog = JSON.parse(file.content.toString('utf8'));
   } catch (error) {
     if (error.status !== 404) throw error;
-    return JSON.parse(await fs.readFile(seedPath, 'utf8'));
+    catalog = JSON.parse(await fs.readFile(seedPath, 'utf8'));
   }
+  catalogCache = catalog;
+  catalogCacheExpiresAt = Date.now() + CATALOG_CACHE_TTL_MS;
+  return JSON.parse(JSON.stringify(catalogCache));
 }
 
 function validateCatalog(value) {
@@ -208,6 +219,8 @@ app.put('/api/admin/catalog', requireAdmin, async (req, res) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: 'Atualizar catálogo Nane Salgados', content: content.toString('base64'), branch, ...(sha ? { sha } : {}) })
     });
+    catalogCache = catalog;
+    catalogCacheExpiresAt = Date.now() + CATALOG_CACHE_TTL_MS;
     res.set('Cache-Control', 'no-store').json({ ok: true, catalog });
   } catch (error) {
     console.error('Catalog save failed:', error.message);
