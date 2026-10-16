@@ -3,3 +3,7 @@
 @media(max-width:850px){.workspace{grid-template-columns:1fr}.editor-card{order:2}.list-card{order:1}.page-heading{align-items:flex-start;flex-direction:column}.save-button{width:100%}}
 @media(max-width:560px){.topbar{height:66px;padding:0 15px}.brand strong{font-size:15px}.brand-mark{width:38px;height:38px}.store-link{font-size:13px}.page-wrap{width:calc(100% - 24px);margin:24px auto 48px}.login-card{padding:25px 21px;margin:7vh auto}.catalog-switch{width:100%;overflow:auto}.catalog-tab{font-size:12px;padding:10px;white-space:nowrap}.editor-card,.list-card{padding:16px}.list-tools{flex-direction:column}.list-tools select{width:100%;max-width:none}.item-row{grid-template-columns:48px minmax(0,1fr)}.item-thumb{width:48px;height:48px}.item-price{text-align:right}.item-info{display:contents}.two-col{gap:8px}.category-form{flex-direction:column}.form-actions{flex-wrap:wrap}}
 .empty-state{padding:28px 14px;text-align:center;color:var(--muted);background:#fbf5ed;border:1px dashed var(--line);border-radius:13px;font-size:13px}
+.login-card .remember-option{display:flex;align-items:center;gap:9px;margin:4px 0 0;color:var(--ink);font-size:13px;font-weight:600;cursor:pointer}
+.login-card .remember-option input{width:18px;min-width:18px;height:18px;margin:0;accent-color:var(--rose)}
+.remember-help{margin:0!important;color:var(--muted);font-size:12px;line-height:1.45}
+.editor-card{scroll-margin-top:84px}

@@ -5,7 +5,7 @@
   const loginCard = $('#login-card');
   const panel = $('#panel');
   const tokenKey = 'nane-admin-token';
-  let token = sessionStorage.getItem(tokenKey) || '';
+  let token = localStorage.getItem(tokenKey) || sessionStorage.getItem(tokenKey) || '';
   let catalog = { categories: [], products: [], beverages: [] };
   let currentCatalog = 'products';
   let selectedFile = null;
@@ -67,7 +67,9 @@
 
   function logout(showMessage = true) {
     token = '';
+    localStorage.removeItem(tokenKey);
     sessionStorage.removeItem(tokenKey);
+    $('#remember-login').checked = false;
     setLoggedIn(false);
     if (showMessage) setMessage($('#login-message'), 'Você saiu do painel.');
   }
@@ -80,7 +82,13 @@
     try {
       const data = await request('/api/admin/login', { method: 'POST', body: JSON.stringify({ password: $('#password').value }) });
       token = data.token;
-      sessionStorage.setItem(tokenKey, token);
+      if ($('#remember-login').checked) {
+        localStorage.setItem(tokenKey, token);
+        sessionStorage.removeItem(tokenKey);
+      } else {
+        sessionStorage.setItem(tokenKey, token);
+        localStorage.removeItem(tokenKey);
+      }
       $('#password').value = '';
       await loadCatalog();
       setLoggedIn(true);
@@ -166,8 +174,10 @@
       $('#image-preview-label').textContent = 'Foto atual · escolha outra para trocar';
       $('#image-preview-wrap').classList.remove('hidden');
     } else $('#image-preview-wrap').classList.add('hidden');
-    $('#name').focus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.matchMedia('(max-width: 850px)').matches) {
+      $('.editor-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    $('#name').focus({ preventScroll: true });
   }
 
   function addCategory(event) {
