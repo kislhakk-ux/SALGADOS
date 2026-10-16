@@ -259,6 +259,25 @@
       border: 3px solid #f9eee4;
     }
     .float-wa:hover { transform: translateY(-3px); background: #168449; }
+    .quick-order-nudge {
+      position: fixed; right: 22px; bottom: 92px; z-index: 15; display: flex; align-items: center; gap: 10px;
+      width: min(270px, calc(100vw - 28px)); min-height: 58px; padding: 8px 12px 8px 16px;
+      border: 1px solid rgba(200, 160, 94, .65); border-radius: 18px; color: var(--rose-dark);
+      background: linear-gradient(120deg, #fffaf4, #fff0e7); box-shadow: 0 10px 28px rgba(83, 45, 35, .2);
+      text-align: left; opacity: 0; visibility: hidden; pointer-events: none;
+      transform: translateY(12px) scale(.96); transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+    }
+    .quick-order-nudge.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
+    .quick-order-nudge:hover { border-color: var(--rose); box-shadow: 0 13px 32px rgba(83, 45, 35, .26); }
+    .quick-order-copy { display: grid; gap: 1px; flex: 1; }
+    .quick-order-copy strong { font-size: .91rem; line-height: 1.2; }
+    .quick-order-copy small { color: var(--muted); font-size: .68rem; }
+    .delivery-ride { width: 52px; height: 40px; flex: 0 0 auto; overflow: visible; animation: motoboy-wobble .52s ease-in-out infinite alternate; transform-origin: 31px 35px; }
+    .delivery-ride .wheel { fill: #fffaf4; stroke: #754c3c; stroke-width: 3; }
+    .delivery-ride .bike-line { fill: none; stroke: #b85f57; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+    .delivery-ride .rider { fill: #c17b4f; stroke: #8e513d; stroke-width: 1.4; stroke-linejoin: round; }
+    .delivery-ride .helmet { fill: #d8aa61; stroke: #8e613d; stroke-width: 1.6; }
+    @keyframes motoboy-wobble { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(-2px); } }
     .toast {
       position: fixed; left: 50%; bottom: 25px; transform: translate(-50%, 20px);
       background: #442c27; color: white; padding: 12px 18px; border-radius: 10px;
@@ -357,6 +376,7 @@
       .footer-inner { align-items: flex-start; flex-direction: column; }
       .footer-inner .button { width: 100%; }
       .float-wa { right: 14px; bottom: 14px; width: 52px; height: 52px; }
+      .quick-order-nudge { right: 14px; bottom: 78px; min-height: 54px; border-radius: 16px; }
       .toast { bottom: 78px; }
     }
     @media (max-width: 390px) {
@@ -527,6 +547,17 @@
     <div class="footer-note">Cardápio e preços sujeitos à confirmação. Faça sua encomenda com pelo menos 2 horas de antecedência.</div>
   </footer>
 
+  <button class="quick-order-nudge" id="quick-order" type="button" aria-label="Enviar o pedido selecionado pelo WhatsApp" aria-hidden="true" tabindex="-1" disabled>
+    <span class="quick-order-copy"><strong>Enviar pedido</strong><small>Toque para mandar pelo WhatsApp</small></span>
+    <svg class="delivery-ride" viewBox="0 0 60 44" aria-hidden="true">
+      <circle class="wheel" cx="13" cy="34" r="6"/><circle class="wheel" cx="47" cy="34" r="6"/>
+      <path class="bike-line" d="M13 34l10-12 9 12H13l7-9h15l12 9m-10-17 6 5h7"/>
+      <path class="rider" d="M25 18l7-5 7 7-4 4-6-3-4 8-6-1 4-8z"/>
+      <path class="bike-line" d="M31 15l9 6m-12-1 8 8"/>
+      <circle class="helmet" cx="23" cy="9" r="6"/><path class="helmet" d="M18 10c1-5 5-8 10-6l4 5-2 2z"/>
+      <path class="bike-line" d="M41 15l5-1"/>
+    </svg>
+  </button>
   <a class="float-wa" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa com a Nane no WhatsApp">☏</a>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -787,6 +818,11 @@
       });
       total.textContent = money(pricedTotal);
       const itemCount = chosen.length + chosenBeverages.length;
+      const quickOrder = document.getElementById('quick-order');
+      quickOrder.disabled = itemCount === 0;
+      quickOrder.classList.toggle('is-visible', itemCount > 0);
+      quickOrder.setAttribute('aria-hidden', itemCount === 0 ? 'true' : 'false');
+      quickOrder.tabIndex = itemCount > 0 ? 0 : -1;
       if (!itemCount) summary.textContent = 'Ainda não há itens selecionados.';
       else summary.textContent = unitCount + (unitCount === 1 ? ' quantidade selecionada' : ' quantidades selecionadas') + ' · ' + itemCount + (itemCount === 1 ? ' produto' : ' produtos') + (chosenBeverages.length ? ' · ' + chosenBeverages.length + (chosenBeverages.length === 1 ? ' bebida' : ' bebidas') : '');
     }
@@ -828,7 +864,7 @@
       if (output) output.textContent = beverageQuantities[id];
       updateOrder();
     });
-    document.getElementById('send-order').addEventListener('click', function() {
+    function sendOrderToWhatsApp() {
       const chosen = products.filter(function(product) { return quantities[product.id] > 0; });
       const chosenBeverages = beverages.filter(function(beverage) { return beverageQuantities[beverage.id] > 0; });
       if (!chosen.length && !chosenBeverages.length) {
@@ -863,7 +899,9 @@
       message += '\n\nPor favor, confirme disponibilidade e entrega. Vim pelo site.';
       const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
       window.open(url, '_blank', 'noopener,noreferrer');
-    });
+    }
+    document.getElementById('send-order').addEventListener('click', sendOrderToWhatsApp);
+    document.getElementById('quick-order').addEventListener('click', sendOrderToWhatsApp);
     updateFilters();
     renderProducts('todos');
     renderBeverages('todos');
