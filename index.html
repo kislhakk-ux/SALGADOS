@@ -884,14 +884,14 @@
       const orderLines = chosen.map(function(product) {
         const amount = quantities[product.id];
         const lineTotal = product.price == null ? 'a confirmar' : money(Number(product.price) * amount);
-        const itemEmoji = product.category === 'doces' ? '🍰' : product.category === 'centos' ? '📦' : '🥟';
+        const itemEmoji = product.category === 'doces' ? '🍰' : product.category === 'centos' ? '📦' : '🍴';
         const unitNote = product.unitLabel === 'cento' ? ' (100 salgados)' : '';
         return itemEmoji + ' ' + amount + '× ' + product.name + unitNote + ' — ' + lineTotal;
       });
       chosenBeverages.forEach(function(beverage) {
         const packageSize = beverage.description.split('· ')[1];
         const lineTotal = beverage.price == null ? 'a confirmar' : money(Number(beverage.price) * beverageQuantities[beverage.id]);
-        orderLines.push('🥤 ' + beverageQuantities[beverage.id] + '× ' + beverage.name + ' (' + packageSize + ') — ' + lineTotal);
+        orderLines.push('🍹 ' + beverageQuantities[beverage.id] + '× ' + beverage.name + ' (' + packageSize + ') — ' + lineTotal);
       });
       const pricedTotal = chosen.reduce(function(sum, product) {
         return sum + (product.price == null ? 0 : Number(product.price) * quantities[product.id]);
@@ -902,12 +902,12 @@
         .concat(chosenBeverages.filter(function(beverage) { return beverage.price == null; }).map(function(beverage) { return beverage.name; }));
       const name = document.getElementById('customer-name').value.trim();
       const note = document.getElementById('delivery-note').value.trim();
-      let message = 'Ol\u00e1, Nane! 😊 Quero fazer este pedido:\n\n' + orderLines.join('\n') +
-        '\n\n🧾 Total estimado: ' + money(pricedTotal);
-      if (unknownItems.length) message += '\n💬 Valores a confirmar: ' + unknownItems.join(', ');
-      if (name) message += '\n\n👤 Nome: ' + name;
-      if (note) message += '\n📍 Entrega/observa\u00e7\u00e3o: ' + note;
-      message += '\n\nPode confirmar disponibilidade e entrega? Obrigada! 💛';
+      let message = 'Ol\u00e1, Nane! Quero fazer este pedido:\n\n' + orderLines.join('\n') +
+        '\n\nTotal estimado: ' + money(pricedTotal);
+      if (unknownItems.length) message += '\nValores a confirmar: ' + unknownItems.join(', ');
+      if (name) message += '\n\nNome: ' + name;
+      if (note) message += '\nEntrega/observa\u00e7\u00e3o: ' + note;
+      message += '\n\nPode confirmar disponibilidade e entrega? Obrigada!';
       const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
       window.open(url, '_blank', 'noopener,noreferrer');
     }
