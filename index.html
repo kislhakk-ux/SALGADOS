@@ -266,6 +266,56 @@
       max-width: calc(100vw - 30px); text-align: center; font-size: .9rem;
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .store-loader {
+      position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;
+      padding: 22px; background: rgba(251, 244, 235, .96); backdrop-filter: blur(7px);
+      opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s ease, visibility .35s ease;
+    }
+    .store-loader.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
+    .loader-card {
+      width: min(100%, 470px); padding: 27px 30px 30px; text-align: center;
+      border: 1px solid rgba(200, 160, 94, .48); border-radius: 28px;
+      background: linear-gradient(155deg, #fffdf9, #fff5eb 80%); box-shadow: 0 24px 80px rgba(83, 45, 35, .17);
+    }
+    .loader-brand { display: inline-flex; align-items: center; gap: 9px; color: var(--rose-dark); font: 700 .94rem Georgia, serif; }
+    .loader-brand-mark {
+      display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--gold);
+      border-radius: 50%; box-shadow: inset 0 0 0 3px #fffdf9, inset 0 0 0 4px #ead7b5; font-size: .78rem;
+    }
+    .loader-scene { display: block; width: min(100%, 370px); height: auto; margin: 4px auto -3px; overflow: visible; }
+    .loader-scene .chef-bob { animation: chef-bob 2.4s ease-in-out infinite; transform-origin: 220px 142px; }
+    .loader-scene .kneading-arm { animation: knead 1.35s ease-in-out infinite; transform-origin: 276px 132px; }
+    .loader-scene .rolling-pin { animation: roll 1.35s ease-in-out infinite; transform-origin: 213px 166px; }
+    .loader-scene .dough-ball { animation: dough-bounce 1.35s ease-in-out infinite; transform-origin: center; }
+    .loader-scene .sparkle { animation: sparkle 2.1s ease-in-out infinite; transform-origin: center; }
+    .loader-scene .sparkle:nth-of-type(2) { animation-delay: .5s; }
+    .loader-eyebrow { margin: 3px 0 5px; color: var(--rose); font-size: .7rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .loader-card h2 { margin: 0; color: var(--ink); font: 500 clamp(1.45rem, 5vw, 1.85rem)/1.2 Georgia, serif; }
+    .loader-card p { margin: 9px 0 18px; color: var(--muted); font-size: .9rem; }
+    .loader-track { position: relative; height: 9px; overflow: hidden; border: 1px solid rgba(200, 160, 94, .35); border-radius: 99px; background: #f3e5d8; }
+    .loader-track span {
+      position: absolute; inset: 0 auto 0 0; width: 38%; border-radius: inherit;
+      background: linear-gradient(90deg, #b85f57, #e7ad74, #c8a05e);
+      box-shadow: 0 0 15px rgba(184, 95, 87, .3); animation: loader-travel 1.45s ease-in-out infinite;
+    }
+    .loader-status { min-height: 1.25em; margin: 12px 0 0 !important; color: var(--rose-dark) !important; font-size: .78rem !important; font-weight: 650; }
+    @keyframes chef-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    @keyframes knead { 0%, 100% { transform: rotate(0deg); } 48% { transform: rotate(11deg); } }
+    @keyframes roll { 0%, 100% { transform: translateX(-3px) rotate(-5deg); } 50% { transform: translateX(4px) rotate(5deg); } }
+    @keyframes dough-bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.025); } }
+    @keyframes sparkle { 0%, 100% { opacity: .35; transform: scale(.78) rotate(0); } 50% { opacity: 1; transform: scale(1.12) rotate(20deg); } }
+    @keyframes loader-travel { 0% { transform: translateX(-115%); } 100% { transform: translateX(370%); } }
+    @media (max-width: 480px) {
+      .store-loader { padding: 16px; }
+      .loader-card { padding: 21px 19px 24px; border-radius: 24px; }
+      .loader-scene { width: min(100%, 330px); }
+      .loader-card p { font-size: .84rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .store-loader, .loader-scene *, .loader-track span { animation: none !important; transition-duration: .01ms !important; }
+      .loader-scene .kneading-arm { transform: rotate(5deg); }
+      .loader-scene .rolling-pin { transform: none; }
+    }
     @media (max-width: 980px) {
       .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .hero { grid-template-columns: 1fr 330px; gap: 35px; }
@@ -321,6 +371,54 @@
   </style>
 </head>
 <body>
+  <div class="store-loader" id="store-loader" aria-hidden="true">
+    <div class="loader-card" role="status" aria-live="polite" aria-atomic="true">
+      <div class="loader-brand"><span class="loader-brand-mark" aria-hidden="true">NS</span><span>Nane Salgados e Churros</span></div>
+      <svg class="loader-scene" viewBox="0 0 440 220" role="img" aria-label="Ilustração animada da Nane preparando salgados">
+        <ellipse cx="220" cy="191" rx="167" ry="17" fill="#eedcc9" opacity=".55"/>
+        <circle cx="86" cy="83" r="4" fill="#d8ae72" class="sparkle"/><path class="sparkle" d="M352 54v13m-6.5-6.5h13" stroke="#d8ae72" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="328" cy="99" r="3" fill="#c97869" class="sparkle"/>
+        <path d="M70 178h300v17H70z" fill="#bd7659"/><path d="M70 178c44-13 91-13 139 0 51-14 105-14 161 0" fill="none" stroke="#d99d76" stroke-width="7" stroke-linecap="round"/>
+        <g>
+          <path d="M93 174c7-25 27-38 51-38 27 0 43 16 48 42H93z" fill="#f7dfbd" stroke="#d8b98f" stroke-width="3"/>
+          <path d="M103 164c9-7 23-7 33 0m3 0c9-7 23-7 33 0" fill="none" stroke="#e0a966" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="133" cy="157" rx="12" ry="7" fill="#e6b974" class="dough-ball"/>
+        </g>
+        <g class="chef-bob">
+          <path d="M188 179c3-28 14-48 32-51 26-5 48 17 51 51z" fill="#fffaf4" stroke="#dfcbb7" stroke-width="3"/>
+          <path d="M219 135l13 17 14-17" fill="none" stroke="#d9b779" stroke-width="3"/>
+          <path d="M223 128v13" stroke="#e5ba9c" stroke-width="8" stroke-linecap="round"/>
+          <ellipse cx="230" cy="94" rx="34" ry="39" fill="#392b29"/>
+          <ellipse cx="230" cy="98" rx="25" ry="31" fill="#f2c8a4"/>
+          <path d="M203 85c4-20 19-30 36-27 14 3 23 16 22 31-11-7-16-17-18-23-8 12-23 18-40 19z" fill="#392b29"/>
+          <path d="M203 65c-4-10 4-18 14-17 0-13 19-16 25-6 10-6 23 1 20 12 12-1 18 11 10 19-10 3-25 2-35-2-11 5-23 6-34 3-6-2-6-6 0-9z" fill="#fffaf4" stroke="#d9c6b2" stroke-width="3"/>
+          <path d="M208 72h44" stroke="#d5b881" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="220" cy="98" r="2.2" fill="#442c27"/><circle cx="240" cy="98" r="2.2" fill="#442c27"/>
+          <path d="M222 111q8 7 16 0" fill="none" stroke="#a44e48" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M198 143c-11 2-21 10-30 20" fill="none" stroke="#fffaf4" stroke-width="15" stroke-linecap="round"/>
+          <path d="M198 143c-11 2-21 10-30 20" fill="none" stroke="#dfcbb7" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="167" cy="164" r="8" fill="#f2c8a4"/>
+          <g class="kneading-arm">
+            <path d="M258 143c12 2 23 9 30 21" fill="none" stroke="#fffaf4" stroke-width="16" stroke-linecap="round"/>
+            <path d="M258 143c12 2 23 9 30 21" fill="none" stroke="#dfcbb7" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="291" cy="164" rx="9" ry="7" fill="#f2c8a4"/>
+          </g>
+        </g>
+        <g class="rolling-pin">
+          <rect x="166" y="158" width="84" height="10" rx="5" fill="#c58a55"/>
+          <path d="M160 163h7m83 0h7" stroke="#8e5a3d" stroke-width="5" stroke-linecap="round"/>
+          <path d="M181 160v6m9-6v6m9-6v6m9-6v6m9-6v6m9-6v6m9-6v6" stroke="#e3b27b" stroke-width="2"/>
+        </g>
+        <path class="dough-ball" d="M269 174c1-10 8-16 17-16s16 6 17 16z" fill="#edc982" stroke="#d4a654" stroke-width="2"/>
+        <path d="M70 178h300" stroke="#a9614d" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="loader-eyebrow">Um instante, feito com carinho</div>
+      <h2>Estamos preparando a loja</h2>
+      <p>O cardápio já está quase saindo do forno.</p>
+      <div class="loader-track" role="progressbar" aria-label="Carregando o cardápio" aria-valuetext="Carregando"><span></span></div>
+      <p class="loader-status" id="store-loader-status">Acordando a cozinha da Nane…</p>
+    </div>
+  </div>
   <div class="topline">Sabor, qualidade e muito carinho em cada pedido <strong>✦</strong> Encomendas pelo WhatsApp</div>
   <header class="header">
     <a class="brand" href="#inicio" aria-label="Nane Salgados e Churros, início">
@@ -528,11 +626,15 @@
       quantities = nextProducts;
       beverageQuantities = nextBeverages;
     }
-    async function loadLiveCatalog() {
+    async function loadLiveCatalog(timeoutMs) {
       const apiBase = window.NANE_CONFIG && window.NANE_CONFIG.API_BASE_URL;
       if (!apiBase) return false;
+      const controller = timeoutMs && typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? window.setTimeout(function() { controller.abort(); }, timeoutMs) : null;
       try {
-        const response = await fetch(apiBase.replace(/\/$/, '') + '/api/catalog', { cache: 'no-store' });
+        const fetchOptions = { cache: 'no-store' };
+        if (controller) fetchOptions.signal = controller.signal;
+        const response = await fetch(apiBase.replace(/\/$/, '') + '/api/catalog', fetchOptions);
         if (!response.ok) return false;
         const catalog = await response.json();
         if (!Array.isArray(catalog.products) || !Array.isArray(catalog.beverages)) return false;
@@ -563,7 +665,59 @@
       } catch (error) {
         console.info('Catálogo online indisponível; mostrando os itens salvos no site.', error);
         return false;
+      } finally {
+        if (timeoutId !== null) window.clearTimeout(timeoutId);
       }
+    }
+
+    async function initializeStorefront() {
+      const apiBase = window.NANE_CONFIG && window.NANE_CONFIG.API_BASE_URL;
+      const loader = document.getElementById('store-loader');
+      const loaderStatus = document.getElementById('store-loader-status');
+      if (!apiBase) return;
+
+      const maxWait = 65000;
+      const startedAt = Date.now();
+      let loaded = false;
+      let loaderVisible = false;
+      let statusTimer = null;
+      const revealTimer = window.setTimeout(function() {
+        loaderVisible = true;
+        loader.classList.add('is-visible');
+        loader.setAttribute('aria-hidden', 'false');
+        const messages = [
+          'Acordando a cozinha da Nane…',
+          'Separando os sabores do cardápio…',
+          'Quase pronto para você escolher…',
+          'Só mais um instante, com carinho…'
+        ];
+        let messageIndex = 0;
+        statusTimer = window.setInterval(function() {
+          messageIndex = (messageIndex + 1) % messages.length;
+          loaderStatus.textContent = messages[messageIndex];
+        }, 7000);
+      }, 950);
+
+      while (Date.now() - startedAt < maxWait) {
+        const remaining = maxWait - (Date.now() - startedAt);
+        loaded = await loadLiveCatalog(Math.min(remaining, 60000));
+        if (loaded || Date.now() - startedAt >= maxWait) break;
+        await new Promise(function(resolve) { window.setTimeout(resolve, Math.min(4500, maxWait - (Date.now() - startedAt))); });
+      }
+
+      window.clearTimeout(revealTimer);
+      if (statusTimer !== null) window.clearInterval(statusTimer);
+      if (loaderVisible && loaded) {
+        loader.querySelector('h2').textContent = 'Cardápio pronto!';
+        loader.querySelector('.loader-card > p').textContent = 'Escolha seus favoritos e faça seu pedido.';
+        loaderStatus.textContent = 'A vitrine da Nane está aberta para você.';
+        await new Promise(function(resolve) { window.setTimeout(resolve, 450); });
+      }
+      loader.classList.remove('is-visible');
+      loader.setAttribute('aria-hidden', 'true');
+
+      // The opening screen is only used for this first connection. Later syncs stay in the background.
+      keepCatalogInSync();
     }
 
     async function keepCatalogInSync() {
@@ -714,7 +868,7 @@
     renderProducts('todos');
     renderBeverages('todos');
     updateOrder();
-    keepCatalogInSync();
+    initializeStorefront();
   </script>
 </body>
 </html>
