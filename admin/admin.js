@@ -111,7 +111,9 @@
   }
 
   function getImageUrl(path) {
-    return path && apiBase ? `${apiBase}/api/image?path=${encodeURIComponent(path)}` : '';
+    if (!path) return '';
+    const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+    return `https://raw.githubusercontent.com/kislhakk-ux/SALGADOS/main/${encodedPath}`;
   }
 
   function drawList() {
