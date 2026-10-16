@@ -272,7 +272,10 @@
     .quick-order-copy { display: grid; gap: 1px; flex: 1; }
     .quick-order-copy strong { font-size: .91rem; line-height: 1.2; }
     .quick-order-copy small { color: var(--muted); font-size: .68rem; }
-    .delivery-ride { width: 52px; height: 40px; flex: 0 0 auto; overflow: visible; animation: motoboy-wobble .52s ease-in-out infinite alternate; transform-origin: 31px 35px; }
+    .delivery-summary { width: 66px; flex: 0 0 66px; display: grid; justify-items: center; align-content: center; gap: 0; }
+    .delivery-ride { display: block; width: 52px; height: 34px; overflow: visible; animation: motoboy-wobble .52s ease-in-out infinite alternate; transform-origin: 31px 30px; }
+    .quick-order-total { color: var(--rose-dark); font-size: .76rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .quick-order-pending { color: var(--muted); font-size: .52rem; line-height: 1.15; white-space: nowrap; }
     .delivery-ride .wheel { fill: #fffaf4; stroke: #754c3c; stroke-width: 3; }
     .delivery-ride .bike-line { fill: none; stroke: #b85f57; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
     .delivery-ride .rider { fill: #c17b4f; stroke: #8e513d; stroke-width: 1.4; stroke-linejoin: round; }
@@ -549,14 +552,18 @@
 
   <button class="quick-order-nudge" id="quick-order" type="button" aria-label="Enviar o pedido selecionado pelo WhatsApp" aria-hidden="true" tabindex="-1" disabled>
     <span class="quick-order-copy"><strong>Enviar pedido</strong><small>Toque para mandar pelo WhatsApp</small></span>
-    <svg class="delivery-ride" viewBox="0 0 60 44" aria-hidden="true">
-      <circle class="wheel" cx="13" cy="34" r="6"/><circle class="wheel" cx="47" cy="34" r="6"/>
-      <path class="bike-line" d="M13 34l10-12 9 12H13l7-9h15l12 9m-10-17 6 5h7"/>
-      <path class="rider" d="M25 18l7-5 7 7-4 4-6-3-4 8-6-1 4-8z"/>
-      <path class="bike-line" d="M31 15l9 6m-12-1 8 8"/>
-      <circle class="helmet" cx="23" cy="9" r="6"/><path class="helmet" d="M18 10c1-5 5-8 10-6l4 5-2 2z"/>
-      <path class="bike-line" d="M41 15l5-1"/>
-    </svg>
+    <span class="delivery-summary">
+      <svg class="delivery-ride" viewBox="0 0 60 44" aria-hidden="true">
+        <circle class="wheel" cx="13" cy="34" r="6"/><circle class="wheel" cx="47" cy="34" r="6"/>
+        <path class="bike-line" d="M13 34l10-12 9 12H13l7-9h15l12 9m-10-17 6 5h7"/>
+        <path class="rider" d="M25 18l7-5 7 7-4 4-6-3-4 8-6-1 4-8z"/>
+        <path class="bike-line" d="M31 15l9 6m-12-1 8 8"/>
+        <circle class="helmet" cx="23" cy="9" r="6"/><path class="helmet" d="M18 10c1-5 5-8 10-6l4 5-2 2z"/>
+        <path class="bike-line" d="M41 15l5-1"/>
+      </svg>
+      <strong class="quick-order-total" id="quick-order-total" aria-live="polite">R$ 0,00</strong>
+      <small class="quick-order-pending" id="quick-order-pending" hidden>+ a confirmar</small>
+    </span>
   </button>
   <a class="float-wa" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa com a Nane no WhatsApp">☏</a>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -817,6 +824,9 @@
         if (output) output.textContent = beverageQuantities[beverage.id];
       });
       total.textContent = money(pricedTotal);
+      const hasUnpricedItems = chosen.some(function(product) { return product.price == null; }) || chosenBeverages.some(function(beverage) { return beverage.price == null; });
+      document.getElementById('quick-order-total').textContent = money(pricedTotal);
+      document.getElementById('quick-order-pending').hidden = !hasUnpricedItems;
       const itemCount = chosen.length + chosenBeverages.length;
       const quickOrder = document.getElementById('quick-order');
       quickOrder.disabled = itemCount === 0;
