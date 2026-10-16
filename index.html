@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8eee4">
+  <meta name="description" content="Nane Salgados e Churros: salgados, doces e encomendas para seus momentos especiais.">
+  <title>Nane Salgados e Churros</title>
+  <style>
+    :root {
+      --cream: #fbf4eb;
+      --paper: #fffaf4;
+      --rose: #b85f57;
+      --rose-dark: #95483f;
+      --rose-pale: #f4ded5;
+      --gold: #c8a05e;
+      --ink: #442c27;
+      --muted: #806c64;
+      --line: #ead8c8;
+      --white: #fff;
+      --shadow: 0 18px 50px rgba(83, 45, 35, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: var(--cream);
+      background-image:
+        linear-gradient(rgba(251,244,235,.88), rgba(251,244,235,.88)),
+        url("assets/banner-nane.jpeg");
+      background-position: center center, center top;
+      background-size: cover, min(100vw, 820px) auto;
+      background-repeat: no-repeat, no-repeat;
+      background-attachment: fixed, fixed;
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .topline {
+      background: var(--rose);
+      color: #fff8f0;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: .82rem;
+      letter-spacing: .02em;
+    }
+    .topline strong { color: #ffe2a9; }
+    .header {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      text-decoration: none;
+      min-width: 235px;
+    }
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--rose-dark);
+      background: #fff8ef;
+      font-family: Georgia, serif;
+      font-weight: 700;
+      font-size: 1.08rem;
+      box-shadow: inset 0 0 0 3px #fff8ef, inset 0 0 0 4px #e9d6b5;
+    }
+    .brand-name { display: block; font-family: Georgia, serif; font-size: 1.14rem; font-weight: 700; line-height: 1.15; }
+    .brand-sub { display: block; color: var(--muted); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; }
+    .nav { display: flex; gap: 28px; align-items: center; }
+    .nav a { text-decoration: none; color: #644a42; font-size: .93rem; }
+    .nav a:hover { color: var(--rose); }
+    .button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--rose);
+      color: white;
+      padding: 13px 20px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .button:hover { background: var(--rose-dark); transform: translateY(-2px); box-shadow: 0 9px 22px rgba(149,72,63,.2); }
+    .button-outline { color: var(--rose-dark); background: transparent; border: 1px solid #dcb7a8; }
+    .button-outline:hover { color: white; }
+    .header-cta { padding: 11px 17px; white-space: nowrap; font-size: .88rem; }
+    .hero {
+      width: min(1180px, calc(100% - 40px));
+      margin: 10px auto 48px;
+      display: grid;
+      grid-template-columns: 1fr minmax(300px, 410px);
+      align-items: center;
+      gap: clamp(30px, 6vw, 90px);
+      padding: 36px 0 20px;
+    }
+    .hero-copy { padding: 28px 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--rose-dark);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .73rem;
+      font-weight: 800;
+    }
+    .eyebrow:before { content: ""; width: 28px; height: 1px; background: var(--gold); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      font-size: clamp(2.75rem, 5.4vw, 5rem);
+      letter-spacing: -.045em;
+      line-height: 1.01;
+      max-width: 730px;
+      margin: 20px 0 18px;
+    }
+    h1 em { color: var(--rose); font-weight: 500; }
+    .hero-copy > p { max-width: 590px; color: #725d55; font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 28px; }
+    .hero-points { display: flex; flex-wrap: wrap; gap: 16px 24px; color: var(--muted); font-size: .88rem; }
+    .hero-points span:before { content: "✦"; color: var(--gold); margin-right: 7px; }
+    .hero-art { position: relative; justify-self: center; width: min(100%, 390px); }
+    .hero-art img { display: block; width: 100%; height: auto; border-radius: 22px; box-shadow: var(--shadow); }
+    .hero-stamp {
+      position: absolute; left: -32px; bottom: 30px; width: 116px; height: 116px;
+      border-radius: 50%; display: grid; place-items: center; text-align: center;
+      padding: 14px; color: #fff9f1; background: var(--rose); border: 5px solid var(--cream);
+      font-family: Georgia, serif; font-size: .94rem; line-height: 1.1; transform: rotate(-8deg);
+      box-shadow: 0 8px 20px rgba(80, 42, 32, .17);
+    }
+    .section { padding: 72px 20px; }
+    .section-white { background: rgba(255,250,244,.80); }
+    .section-head { width: min(1180px, 100%); margin: 0 auto 28px; }
+    .section-head h2 {
+      margin: 9px 0 8px;
+      font-family: Georgia, serif;
+      font-size: clamp(2rem, 3.6vw, 3.25rem);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -.025em;
+    }
+    .section-head p { color: var(--muted); max-width: 650px; margin-bottom: 0; }
+    .menu-notice {
+      width: min(1180px, 100%); margin: 24px auto;
+      padding: 13px 16px; border-radius: 12px; background: #fff0df;
+      border: 1px solid #eed3ae; color: #785c3b; font-size: .88rem;
+    }
+    .menu-notice strong { color: #674526; }
+    .filters { width: min(1180px, 100%); margin: 22px auto 24px; display: flex; flex-wrap: wrap; gap: 9px; }
+    .filter {
+      border: 1px solid var(--line); background: transparent; color: #765c53;
+      padding: 9px 16px; border-radius: 999px; font-size: .88rem;
+    }
+    .filter.active, .filter:hover { color: white; background: var(--rose); border-color: var(--rose); }
+    .product-grid {
+      width: min(1180px, 100%); margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px;
+    }
+    .product {
+      position: relative; overflow: hidden; border-radius: 17px; background: white;
+      border: 1px solid #efdfd1; background: rgba(255,255,255,.96); box-shadow: 0 7px 24px rgba(80,42,32,.045);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .product:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .product-image-wrap { height: 190px; overflow: hidden; background: #f2e3d5; }
+    .product-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+    .beverage-image-wrap { height: 190px; overflow: hidden; background: linear-gradient(145deg, #fffaf4, #f5e8da); }
+    .beverage-image { width: 100%; height: 100%; object-fit: contain; display: block; padding: 12px; transition: transform .3s ease; }
+    .product:hover .product-image { transform: scale(1.04); }
+    .product:hover .beverage-image { transform: scale(1.04); }
+    .product-tag {
+      position: absolute; top: 12px; left: 12px; border-radius: 999px;
+      padding: 5px 9px; background: rgba(255,250,244,.94); color: var(--rose-dark);
+      font-size: .7rem; font-weight: 800;
+    }
+    .product-body { padding: 15px 15px 14px; }
+    .product-body h3 { margin: 0 0 5px; font-family: Georgia, serif; font-size: 1.12rem; font-weight: 600; }
+    .product-body p { color: var(--muted); font-size: .83rem; min-height: 40px; margin: 0 0 12px; }
+    .product-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .price { font-weight: 800; font-size: .98rem; color: var(--rose-dark); white-space: nowrap; }
+    .price small { display: block; color: var(--muted); font-size: .7rem; font-weight: 500; }
+    .stepper { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+    .stepper button {
+      width: 29px; height: 29px; border: 0; border-radius: 50%; background: #f8eee4;
+      color: var(--rose-dark); font-size: 1.1rem; font-weight: 700; line-height: 1;
+    }
+    .stepper button:hover { background: var(--rose); color: white; }
+    .stepper output { min-width: 16px; text-align: center; font-weight: 700; font-size: .9rem; }
+    .drink-price { color: #765c53; }
+    .drink-price small { max-width: 115px; }
+    .order-instructions { display: flex; flex-direction: column; justify-content: center; }
+    .order-instructions ul { margin: 0; padding-left: 20px; color: #725d55; font-size: .9rem; }
+    .order-instructions li + li { margin-top: 9px; }
+    .order-area {
+      width: min(1180px, 100%); margin: 30px auto 0; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 20px;
+    }
+    .order-card { padding: 22px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,250,245,.91); }
+    .order-card h3 { font-family: Georgia, serif; font-size: 1.35rem; margin-bottom: 7px; }
+    .order-card p { color: var(--muted); font-size: .9rem; margin-bottom: 17px; }
+    .order-fields { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
+    .field label { display: block; font-size: .82rem; font-weight: 700; margin-bottom: 6px; color: #61483f; }
+    .field input, .field select {
+      width: 100%; min-height: 44px; border: 1px solid #e4ccba; border-radius: 9px;
+      background: white; padding: 9px 11px; color: var(--ink);
+    }
+    .order-total { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin: 20px 0 12px; }
+    .order-total span { color: var(--muted); font-size: .9rem; }
+    .order-total strong { color: var(--rose-dark); font-size: 1.55rem; font-family: Georgia, serif; }
+    .order-hint { color: var(--muted); font-size: .77rem; margin-bottom: 15px; }
+    .wide { width: 100%; }
+    .banner-section { padding: 72px 20px; }
+    .banner-row {
+      width: min(1050px, 100%); margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 300px; align-items: center; gap: 54px;
+    }
+    .banner-row h2 { font-family: Georgia, serif; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1.08; font-weight: 500; }
+    .banner-row p { color: var(--muted); max-width: 480px; }
+    .banner-card {
+      display: block; width: 100%; border: 7px solid white; border-radius: 18px;
+      box-shadow: var(--shadow); background: white; overflow: hidden;
+    }
+    .banner-card img { display: block; width: 100%; height: auto; }
+    .menu-poster { width: min(1180px, 100%); margin: 44px auto 0; display: grid; grid-template-columns: 1fr minmax(250px, 355px); gap: 35px; align-items: center; }
+    .menu-poster figure { margin: 0; justify-self: center; width: min(100%, 355px); }
+    .menu-poster figure img { display: block; width: 100%; height: auto; border-radius: 16px; box-shadow: var(--shadow); }
+    .poster-copy { padding: 25px; border-radius: 18px; background: #f6e5dc; }
+    .poster-copy h3 { font-family: Georgia, serif; font-weight: 500; font-size: 1.7rem; margin-bottom: 9px; }
+    .poster-copy p { color: #765b53; margin-bottom: 0; }
+    .footer { background: rgba(74,48,41,.97); color: #fff7ef; padding: 44px 20px 28px; }
+    .footer-inner { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .footer h2 { font-family: Georgia, serif; font-weight: 500; margin: 0 0 4px; font-size: 1.65rem; }
+    .footer p { color: #e4cdc0; margin: 0; font-size: .9rem; }
+    .footer .button { background: #47a46d; }
+    .footer .button:hover { background: #328a57; }
+    .footer-note { width: min(1180px, 100%); margin: 32px auto 0; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.16); color: #d3b9ab; font-size: .75rem; }
+    .float-wa {
+      position: fixed; right: 22px; bottom: 22px; z-index: 10; width: 58px; height: 58px;
+      display: grid; place-items: center; border-radius: 50%; color: white; background: #21a65b;
+      text-decoration: none; font-size: 1.7rem; box-shadow: 0 8px 24px rgba(20,82,48,.28);
+      border: 3px solid #f9eee4;
+    }
+    .float-wa:hover { transform: translateY(-3px); background: #168449; }
+    .toast {
+      position: fixed; left: 50%; bottom: 25px; transform: translate(-50%, 20px);
+      background: #442c27; color: white; padding: 12px 18px; border-radius: 10px;
+      box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s ease; z-index: 30;
+      max-width: calc(100vw - 30px); text-align: center; font-size: .9rem;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 980px) {
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero { grid-template-columns: 1fr 330px; gap: 35px; }
+      .nav { gap: 16px; }
+      .header { width: min(100% - 28px, 1180px); }
+    }
+    @media (max-width: 720px) {
+      .topline { font-size: .73rem; }
+      .header { min-height: 72px; }
+      .brand { min-width: 0; }
+      .brand-mark { width: 42px; height: 42px; }
+      .brand-name { font-size: 1rem; }
+      .brand-sub { font-size: .59rem; }
+      .nav { display: none; }
+      .header-cta { padding: 10px 13px; font-size: .8rem; }
+      .hero { grid-template-columns: 1fr; margin-top: 0; padding-top: 28px; gap: 18px; }
+      .hero-copy { padding: 10px 0 0; }
+      h1 { font-size: clamp(2.6rem, 12vw, 4rem); }
+      .hero-art { width: min(100%, 340px); }
+      .hero-stamp { width: 92px; height: 92px; left: -13px; bottom: 22px; font-size: .77rem; }
+      .section { padding: 55px 16px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .product-image-wrap { height: 145px; }
+      .beverage-image-wrap { height: 145px; }
+      .product-body { padding: 12px; }
+      .product-body h3 { font-size: 1rem; }
+      .product-body p { font-size: .76rem; min-height: 48px; }
+      .product-bottom { align-items: flex-start; flex-direction: column; }
+      .price { font-size: .93rem; }
+      .stepper { align-self: flex-end; }
+      .order-area { grid-template-columns: 1fr; }
+      .order-card { padding: 18px; }
+      .banner-section { padding: 54px 16px; }
+      .banner-row { grid-template-columns: 1fr; gap: 24px; }
+      .banner-card { width: min(100%, 330px); justify-self: center; }
+      .menu-poster { grid-template-columns: 1fr; gap: 22px; }
+      .menu-poster figure { width: min(100%, 310px); }
+      .poster-copy { padding: 20px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .footer-inner .button { width: 100%; }
+      .float-wa { right: 14px; bottom: 14px; width: 52px; height: 52px; }
+      .toast { bottom: 78px; }
+    }
+    @media (max-width: 390px) {
+      .header { width: calc(100% - 20px); gap: 8px; }
+      .header-cta { font-size: .74rem; padding: 9px 11px; }
+      .product-grid { gap: 9px; }
+      .product-image-wrap { height: 125px; }
+      .stepper { gap: 5px; }
+      .stepper button { width: 27px; height: 27px; }
+      .order-fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">Sabor, qualidade e muito carinho em cada pedido <strong>✦</strong> Encomendas pelo WhatsApp</div>
+  <header class="header">
+    <a class="brand" href="#inicio" aria-label="Nane Salgados e Churros, início">
+      <span class="brand-mark" aria-hidden="true">NS</span>
+      <span><span class="brand-name">Nane Salgados</span><span class="brand-sub">e Churros</span></span>
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#catalogo">Cardápio</a>
+      <a href="#bebidas">Bebidas</a>
+      <a href="#como-pedir">Como pedir</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="button header-cta" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer">☏ <span>WhatsApp</span></a>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">Feito com amor para momentos especiais</span>
+        <h1>Deixe sua festa mais <em>saborosa.</em></h1>
+        <p>Salgados, churros e delícias caseiras para compartilhar com quem você gosta. Monte seu pedido e envie direto para a Nane pelo WhatsApp.</p>
+        <div class="hero-actions">
+          <a class="button" href="#catalogo">Escolher meus salgados <span aria-hidden="true">→</span></a>
+          <a class="button button-outline" href="#como-pedir">Como funciona</a>
+          <a class="button button-outline" href="#bebidas">Ver bebidas</a>
+        </div>
+        <div class="hero-points"><span>Preço por unidade</span><span>Pedido mínimo: 2 horas</span><span>Ideal para festas</span></div>
+      </div>
+      <div class="hero-art">
+        <img src="assets/bandeja-festa.jpg" alt="Bandeja com variedade de salgadinhos para festas">
+        </div>
+    </section>
+
+    <section class="section section-white" id="catalogo">
+      <div class="section-head">
+        <span class="eyebrow">Escolha seus favoritos</span>
+        <h2>Cardápio da Nane</h2>
+        <p>Selecione a quantidade de cada item. O preço dos salgados é por unidade; o valor dos doces é confirmado pelo WhatsApp.</p>
+      </div>
+      <div class="menu-notice"><strong>R$ 1,00 por unidade</strong> conforme o cardápio enviado. Selecione a quantidade desejada e confira o pedido antes de enviar.</div>
+      <div class="filters" role="group" aria-label="Filtrar cardápio">
+        <button class="filter snack-filter active" type="button" data-filter="todos">Todos</button>
+        <button class="filter snack-filter" type="button" data-filter="salgados">Salgados</button>
+        <button class="filter snack-filter" type="button" data-filter="doces">Doces</button>
+      </div>
+      <div class="product-grid" id="product-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="section section-white" id="bebidas">
+      <div class="section-head">
+        <span class="eyebrow">Complete seu pedido</span>
+        <h2>Bebidas</h2>
+        <p>Uma seleção separada para facilitar seu pedido. Escolha cada bebida e a quantidade; os preços ficam em aberto por enquanto.</p>
+      </div>
+      <div class="menu-notice"><strong>Preços a definir</strong> · As imagens ajudam a identificar as embalagens. A disponibilidade e o valor serão confirmados pelo WhatsApp.</div>
+      <div class="filters" role="group" aria-label="Filtrar bebidas">
+        <button class="filter beverage-filter active" type="button" data-beverage-filter="todos">Todas</button>
+        <button class="filter beverage-filter" type="button" data-beverage-filter="refrigerantes">Refrigerantes</button>
+        <button class="filter beverage-filter" type="button" data-beverage-filter="sucos">Sucos</button>
+        <button class="filter beverage-filter" type="button" data-beverage-filter="agua">Água</button>
+      </div>
+      <div class="product-grid" id="beverage-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="section" id="como-pedir">
+      <div class="section-head">
+        <span class="eyebrow">Finalize sua encomenda</span>
+        <h2>Seu pedido</h2>
+        <p id="selection-summary">Ainda não há itens selecionados.</p>
+      </div>
+      <div class="order-area">
+        <div class="order-card order-instructions">
+          <h3>Como pedir</h3>
+          <p>Monte seu carrinho nos catálogos e envie a lista direto para a Nane.</p>
+          <ul>
+            <li>Use os botões + e − para ajustar as quantidades.</li>
+            <li>Os preços das bebidas serão preenchidos depois e confirmados pelo WhatsApp.</li>
+            <li>Informe seu nome e endereço ou observação antes de enviar.</li>
+          </ul>
+        </div>
+        <div class="order-card">
+          <h3>Conferir e enviar</h3>
+          <div class="field">
+            <label for="customer-name">Seu nome (opcional)</label>
+            <input id="customer-name" type="text" maxlength="60" placeholder="Como podemos te chamar?">
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label for="delivery-note">Entrega ou observação (opcional)</label>
+            <input id="delivery-note" type="text" maxlength="120" placeholder="Bairro, endereço ou detalhe do pedido">
+          </div>
+          <div class="order-total"><span>Total estimado dos salgados</span><strong id="total">R$ 0,00</strong></div>
+          <div class="order-hint">Bebidas e itens sem preço serão combinados na conversa.</div>
+          <button class="button wide" type="button" id="send-order">Enviar pedido pelo WhatsApp <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="banner-section" aria-label="Apresentação da Nane">
+      <div class="menu-poster">
+        <div class="poster-copy">
+          <span class="eyebrow">Cardápio ilustrado</span>
+          <h3>Mais opções para a sua festa</h3>
+          <p>Confira o banner do cardápio e selecione no site os salgados disponíveis. Para outras opções, tamanhos ou sabores, fale com a Nane pelo WhatsApp.</p>
+        </div>
+        <figure><img src="assets/banner-cardapio.jpeg" alt="Cardápio ilustrado da Nane com coxinhas, risoles, bolinha de pizza, enroladinho, kibe, mini pastel e mini churros"></figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contato">
+    <div class="footer-inner">
+      <div><h2>Nane Salgados e Churros</h2><p>Encomendas pelo WhatsApp · (67) 99122-6080</p></div>
+      <a class="button" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Quero%20fazer%20uma%20encomenda." target="_blank" rel="noopener noreferrer">Conversar com a Nane no WhatsApp <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="footer-note">Cardápio e preços sujeitos à confirmação. Faça sua encomenda com pelo menos 2 horas de antecedência.</div>
+  </footer>
+
+  <a class="float-wa" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa com a Nane no WhatsApp">☏</a>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const WHATSAPP_NUMBER = '5567991226080';
+    const products = [
+      { id: 'coxinha-carne', name: 'Coxinha de Carne', category: 'salgados', price: 1, image: 'assets/coxinhas.jpg', description: 'Douradinha e crocante, perfeita para servir.' },
+      { id: 'coxinha-frango', name: 'Coxinha de Frango', category: 'salgados', price: 1, image: 'assets/coxinhas.jpg', description: 'Um clássico para compartilhar em qualquer ocasião.' },
+      { id: 'risoles-carne', name: 'Risoles de Carne', category: 'salgados', price: 1, image: 'assets/salgados-artesanais.jpg', description: 'Massa empanada com recheio saboroso.' },
+      { id: 'risoles-frango', name: 'Risoles de Frango', category: 'salgados', price: 1, image: 'assets/salgados-sortidos.jpg', description: 'Uma opção dourada para completar a mesa.' },
+      { id: 'risoles-pizza', name: 'Risoles de Pizza', category: 'salgados', price: 1, image: 'assets/salgados-sortidos.jpg', description: 'Sabor inspirado em um dos favoritos da família.' },
+      { id: 'bolinha-pizza', name: 'Bolinha de Pizza', category: 'salgados', price: 1, image: 'assets/bolinhas-queijo.jpg', description: 'Pequena no tamanho, cheia de sabor.' },
+      { id: 'enroladinho', name: 'Enroladinho de Salsicha', category: 'salgados', price: 1, image: 'assets/bandeja-festa.jpg', description: 'Uma escolha que agrada a toda a turma.' },
+      { id: 'kibe', name: 'Kibe', category: 'salgados', price: 1, image: 'assets/bolinhos-crocantes.jpg', description: 'Crocante por fora e muito gostoso.' },
+      { id: 'mini-pastel', name: 'Mini Pastelzinho', category: 'salgados', price: 1, image: 'assets/salgados-artesanais.jpg', description: 'Delícia em tamanho de festa.' },
+      { id: 'mini-churros', name: 'Mini Churros Espanhol', category: 'doces', price: 1, image: 'assets/banner-cardapio.jpeg', description: 'Um docinho para fechar o pedido com carinho.' },
+      { id: 'pudim', name: 'Pudim Caseiro', category: 'doces', price: null, image: 'assets/pudim.jpg', description: 'Sobremesa caseira. Consulte o valor pelo WhatsApp.' }
+    ];
+    const beverages = [
+      { id: 'kapo-laranja', name: 'Del Valle Kapo Laranja', category: 'sucos', image: 'assets/bebidas/kapo-laranja.jpg', description: 'Suco de caixinha · 200 ml' },
+      { id: 'kapo-abacaxi', name: 'Del Valle Kapo Abacaxi', category: 'sucos', image: 'assets/bebidas/kapo-abacaxi.webp', description: 'Suco de caixinha · 200 ml' },
+      { id: 'kapo-morango', name: 'Del Valle Kapo Morango', category: 'sucos', image: 'assets/bebidas/kapo-morango.jpg', description: 'Suco de caixinha · 200 ml' },
+      { id: 'kapo-uva', name: 'Del Valle Kapo Uva', category: 'sucos', image: 'assets/bebidas/kapo-uva.jpg', description: 'Suco de caixinha · 200 ml' },
+      { id: 'del-valle-uva-lata', name: 'Del Valle Néctar de Uva', category: 'sucos', image: 'assets/bebidas/del-valle-uva-lata.jpg', description: 'Lata · 290 ml' },
+      { id: 'coca-cola-lata', name: 'Coca-Cola Original', category: 'refrigerantes', image: 'assets/bebidas/coca-cola-lata.jpg', description: 'Lata · 350 ml' },
+      { id: 'coca-zero-lata', name: 'Coca-Cola Sem Açúcar', category: 'refrigerantes', image: 'assets/bebidas/coca-zero-lata.jpg', description: 'Lata · 350 ml' },
+      { id: 'fanta-uva-lata', name: 'Fanta Uva', category: 'refrigerantes', image: 'assets/bebidas/fanta-uva-lata.jpg', description: 'Lata · 350 ml' },
+      { id: 'schweppes-citrus-lata', name: 'Schweppes Citrus', category: 'refrigerantes', image: 'assets/bebidas/schweppes-citrus-lata.jpg', description: 'Lata · 350 ml' },
+      { id: 'agua-500ml', name: 'Água mineral sem gás', category: 'agua', image: 'assets/bebidas/agua-crystal-500ml.jpg', description: 'Garrafa · 500 ml' },
+      { id: 'coca-cola-600ml', name: 'Coca-Cola Original', category: 'refrigerantes', image: 'assets/bebidas/coca-cola-600ml.jpg', description: 'Garrafa PET · 600 ml' },
+      { id: 'coca-cola-2l', name: 'Coca-Cola Original', category: 'refrigerantes', image: 'assets/bebidas/coca-cola-2l.jpg', description: 'Garrafa PET · 2 L' },
+      { id: 'coca-zero-2l', name: 'Coca-Cola Sem Açúcar', category: 'refrigerantes', image: 'assets/bebidas/coca-zero-2l.jpg', description: 'Garrafa PET · 2 L' },
+      { id: 'fanta-laranja-2l', name: 'Fanta Laranja', category: 'refrigerantes', image: 'assets/bebidas/fanta-laranja-2l.jpg', description: 'Garrafa PET · 2 L' }
+    ];
+    const quantities = Object.fromEntries(products.map(function(product) { return [product.id, 0]; }));
+    const beverageQuantities = Object.fromEntries(beverages.map(function(beverage) { return [beverage.id, 0]; }));
+    const grid = document.getElementById('product-grid');
+    const beverageGrid = document.getElementById('beverage-grid');
+    const total = document.getElementById('total');
+    const summary = document.getElementById('selection-summary');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function money(value) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    }
+    function renderProducts(filter) {
+      const visibleProducts = products.filter(function(product) { return filter === 'todos' || product.category === filter; });
+      grid.innerHTML = visibleProducts.map(function(product) {
+        const priceText = product.price === null ? 'Consulte' : money(product.price);
+        const unitText = product.price === null ? 'preço pelo WhatsApp' : 'por unidade';
+        return '<article class="product">' +
+          '<div class="product-image-wrap"><img class="product-image" src="' + product.image + '" alt="' + product.name + '" loading="lazy"></div>' +
+          '<div class="product-body"><h3>' + product.name + '</h3><p>' + product.description + '</p>' +
+          '<div class="product-bottom"><div class="price">' + priceText + '<small>' + unitText + '</small></div>' +
+          '<div class="stepper" aria-label="Quantidade de ' + product.name + '">' +
+          '<button type="button" data-change="-1" data-id="' + product.id + '" aria-label="Diminuir ' + product.name + '">−</button>' +
+          '<output id="qty-' + product.id + '" aria-live="polite">' + quantities[product.id] + '</output>' +
+          '<button type="button" data-change="1" data-id="' + product.id + '" aria-label="Adicionar ' + product.name + '">+</button>' +
+          '</div></div></div></article>';
+      }).join('');
+    }
+    function renderBeverages(filter) {
+      const visibleBeverages = beverages.filter(function(beverage) { return filter === 'todos' || beverage.category === filter; });
+      beverageGrid.innerHTML = visibleBeverages.map(function(beverage) {
+        const packageSize = beverage.description.split('· ')[1];
+        return '<article class="product">' +
+          '<div class="beverage-image-wrap"><img class="beverage-image" src="' + beverage.image + '" alt="' + beverage.name + ', embalagem de ' + packageSize + '" loading="lazy"></div>' +
+          '<div class="product-body"><h3>' + beverage.name + '</h3><p>' + beverage.description + '</p>' +
+          '<div class="product-bottom"><div class="price drink-price">A definir<small>preço depois</small></div>' +
+          '<div class="stepper" aria-label="Quantidade de ' + beverage.name + ' ' + beverage.description + '">' +
+          '<button type="button" data-beverage-change="-1" data-id="' + beverage.id + '" aria-label="Diminuir ' + beverage.name + '">−</button>' +
+          '<output id="qty-' + beverage.id + '" aria-live="polite">' + beverageQuantities[beverage.id] + '</output>' +
+          '<button type="button" data-beverage-change="1" data-id="' + beverage.id + '" aria-label="Adicionar ' + beverage.name + '">+</button>' +
+          '</div></div></div></article>';
+      }).join('');
+    }
+    function updateOrder() {
+      let unitCount = 0;
+      let pricedTotal = 0;
+      const chosen = products.filter(function(product) { return quantities[product.id] > 0; });
+      const chosenBeverages = beverages.filter(function(beverage) { return beverageQuantities[beverage.id] > 0; });
+      chosen.forEach(function(product) {
+        unitCount += quantities[product.id];
+        if (product.price !== null) pricedTotal += product.price * quantities[product.id];
+        const output = document.getElementById('qty-' + product.id);
+        if (output) output.textContent = quantities[product.id];
+      });
+      chosenBeverages.forEach(function(beverage) {
+        unitCount += beverageQuantities[beverage.id];
+        const output = document.getElementById('qty-' + beverage.id);
+        if (output) output.textContent = beverageQuantities[beverage.id];
+      });
+      total.textContent = money(pricedTotal);
+      const itemCount = chosen.length + chosenBeverages.length;
+      if (!itemCount) summary.textContent = 'Ainda não há itens selecionados.';
+      else summary.textContent = unitCount + (unitCount === 1 ? ' unidade selecionada' : ' unidades selecionadas') + ' · ' + itemCount + (itemCount === 1 ? ' item' : ' itens') + (chosenBeverages.length ? ' · ' + chosenBeverages.length + (chosenBeverages.length === 1 ? ' bebida' : ' bebidas') : '');
+    }
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 2600);
+    }
+    document.querySelectorAll('.snack-filter').forEach(function(button) {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('.snack-filter').forEach(function(item) { item.classList.remove('active'); });
+        button.classList.add('active');
+        renderProducts(button.dataset.filter);
+      });
+    });
+    document.querySelectorAll('.beverage-filter').forEach(function(button) {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('.beverage-filter').forEach(function(item) { item.classList.remove('active'); });
+        button.classList.add('active');
+        renderBeverages(button.dataset.beverageFilter);
+      });
+    });
+    grid.addEventListener('click', function(event) {
+      const button = event.target.closest('button[data-id]');
+      if (!button) return;
+      const id = button.dataset.id;
+      quantities[id] = Math.max(0, Math.min(99, quantities[id] + Number(button.dataset.change)));
+      const output = document.getElementById('qty-' + id);
+      if (output) output.textContent = quantities[id];
+      updateOrder();
+    });
+    beverageGrid.addEventListener('click', function(event) {
+      const button = event.target.closest('button[data-beverage-change]');
+      if (!button) return;
+      const id = button.dataset.id;
+      beverageQuantities[id] = Math.max(0, Math.min(99, beverageQuantities[id] + Number(button.dataset.beverageChange)));
+      const output = document.getElementById('qty-' + id);
+      if (output) output.textContent = beverageQuantities[id];
+      updateOrder();
+    });
+    document.getElementById('send-order').addEventListener('click', function() {
+      const chosen = products.filter(function(product) { return quantities[product.id] > 0; });
+      const chosenBeverages = beverages.filter(function(beverage) { return beverageQuantities[beverage.id] > 0; });
+      if (!chosen.length && !chosenBeverages.length) {
+        showToast('Escolha pelo menos um item para montar seu pedido.');
+        return;
+      }
+      const orderLines = chosen.map(function(product) {
+        const amount = quantities[product.id];
+        const lineTotal = product.price === null ? 'valor a confirmar' : money(product.price * amount);
+        return '• ' + amount + ' x ' + product.name + ' — ' + lineTotal;
+      });
+      chosenBeverages.forEach(function(beverage) {
+        const packageSize = beverage.description.split('· ')[1];
+        orderLines.push('• ' + beverageQuantities[beverage.id] + ' x ' + beverage.name + ' (' + packageSize + ') — preço a definir');
+      });
+      const pricedTotal = chosen.reduce(function(sum, product) {
+        return sum + (product.price === null ? 0 : product.price * quantities[product.id]);
+      }, 0);
+      const unknownItems = chosen.filter(function(product) { return product.price === null; }).map(function(product) { return product.name; });
+      const name = document.getElementById('customer-name').value.trim();
+      const note = document.getElementById('delivery-note').value.trim();
+      let message = 'Ol\u00e1, Nane! Quero fazer este pedido:\n\n' + orderLines.join('\n') +
+        '\n\nTotal estimado dos itens com pre\u00e7o informado: ' + money(pricedTotal);
+      if (unknownItems.length) message += '\nA confirmar: ' + unknownItems.join(', ');
+      if (name) message += '\nNome: ' + name;
+      if (note) message += '\nEntrega/observa\u00e7\u00e3o: ' + note;
+      message += '\n\nPor favor, confirme disponibilidade, valores das bebidas e entrega. Vim pelo site.';
+      const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+    renderProducts('todos');
+    renderBeverages('todos');
+    updateOrder();
+  </script>
+</body>
+</html>
