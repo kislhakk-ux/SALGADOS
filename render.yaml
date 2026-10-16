@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: nane-catalog-api
+    runtime: node
+    plan: free
+    region: virginia
+    buildFilter:
+      paths:
+        - api/**
+        - catalog-seed.json
+    buildCommand: npm ci --prefix api
+    startCommand: npm start --prefix api
+    healthCheckPath: /health
+    envVars:
+      - key: GITHUB_OWNER
+        value: kislhakk-ux
+      - key: GITHUB_REPO
+        value: SALGADOS
+      - key: GITHUB_BRANCH
+        value: main
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+
+  - type: web
+    name: nane-catalog-admin
+    runtime: static
+    buildCommand: node scripts/configure-admin.mjs
+    staticPublishPath: ./admin
+    buildFilter:
+      paths:
+        - admin/**
+        - scripts/configure-admin.mjs
+    envVars:
+      - key: PUBLIC_API_URL
+        fromService:
+          type: web
+          name: nane-catalog-api
+          envVarKey: RENDER_EXTERNAL_URL

@@ -358,14 +358,10 @@
       <div class="section-head">
         <span class="eyebrow">Escolha seus favoritos</span>
         <h2>Cardápio da Nane</h2>
-        <p>Selecione a quantidade de cada item. O preço dos salgados é por unidade; o valor dos doces é confirmado pelo WhatsApp.</p>
+        <p>Escolha entre salgados, centos e doces. Os valores e a unidade de venda aparecem em cada item.</p>
       </div>
-      <div class="menu-notice"><strong>R$ 1,00 por unidade</strong> conforme o cardápio enviado. Selecione a quantidade desejada e confira o pedido antes de enviar.</div>
-      <div class="filters" role="group" aria-label="Filtrar cardápio">
-        <button class="filter snack-filter active" type="button" data-filter="todos">Todos</button>
-        <button class="filter snack-filter" type="button" data-filter="salgados">Salgados</button>
-        <button class="filter snack-filter" type="button" data-filter="doces">Doces</button>
-      </div>
+      <div class="menu-notice" id="products-notice"><strong>R$ 1,00 por unidade</strong> conforme o cardápio enviado. Selecione a quantidade desejada e confira o pedido antes de enviar.</div>
+      <div class="filters" id="product-filters" role="group" aria-label="Filtrar cardápio"></div>
       <div class="product-grid" id="product-grid" aria-live="polite"></div>
     </section>
 
@@ -375,13 +371,8 @@
         <h2>Bebidas</h2>
         <p>Uma seleção separada para facilitar seu pedido. Escolha cada bebida e a quantidade; os preços ficam em aberto por enquanto.</p>
       </div>
-      <div class="menu-notice"><strong>Preços a definir</strong> · As imagens ajudam a identificar as embalagens. A disponibilidade e o valor serão confirmados pelo WhatsApp.</div>
-      <div class="filters" role="group" aria-label="Filtrar bebidas">
-        <button class="filter beverage-filter active" type="button" data-beverage-filter="todos">Todas</button>
-        <button class="filter beverage-filter" type="button" data-beverage-filter="refrigerantes">Refrigerantes</button>
-        <button class="filter beverage-filter" type="button" data-beverage-filter="sucos">Sucos</button>
-        <button class="filter beverage-filter" type="button" data-beverage-filter="agua">Água</button>
-      </div>
+      <div class="menu-notice" id="beverages-notice"><strong>Preços a definir</strong> · As imagens ajudam a identificar as embalagens. A disponibilidade e o valor serão confirmados pelo WhatsApp.</div>
+      <div class="filters" id="beverage-filters" role="group" aria-label="Filtrar bebidas"></div>
       <div class="product-grid" id="beverage-grid" aria-live="polite"></div>
     </section>
 
@@ -411,7 +402,7 @@
             <label for="delivery-note">Entrega ou observação (opcional)</label>
             <input id="delivery-note" type="text" maxlength="120" placeholder="Bairro, endereço ou detalhe do pedido">
           </div>
-          <div class="order-total"><span>Total estimado dos salgados</span><strong id="total">R$ 0,00</strong></div>
+          <div class="order-total"><span>Total estimado dos itens com preço</span><strong id="total">R$ 0,00</strong></div>
           <div class="order-hint">Bebidas e itens sem preço serão combinados na conversa.</div>
           <button class="button wide" type="button" id="send-order">Enviar pedido pelo WhatsApp <span aria-hidden="true">↗</span></button>
         </div>
@@ -441,9 +432,10 @@
   <a class="float-wa" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa com a Nane no WhatsApp">☏</a>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="site-config.js"></script>
   <script>
     const WHATSAPP_NUMBER = '5567991226080';
-    const products = [
+    const fallbackProducts = [
       { id: 'coxinha-carne', name: 'Coxinha de Carne', category: 'salgados', price: 1, image: 'assets/coxinhas.jpg', description: 'Douradinha e crocante, perfeita para servir.' },
       { id: 'coxinha-frango', name: 'Coxinha de Frango', category: 'salgados', price: 1, image: 'assets/coxinhas.jpg', description: 'Um clássico para compartilhar em qualquer ocasião.' },
       { id: 'risoles-carne', name: 'Risoles de Carne', category: 'salgados', price: 1, image: 'assets/salgados-artesanais.jpg', description: 'Massa empanada com recheio saboroso.' },
@@ -454,9 +446,10 @@
       { id: 'kibe', name: 'Kibe', category: 'salgados', price: 1, image: 'assets/bolinhos-crocantes.jpg', description: 'Crocante por fora e muito gostoso.' },
       { id: 'mini-pastel', name: 'Mini Pastelzinho', category: 'salgados', price: 1, image: 'assets/salgados-artesanais.jpg', description: 'Delícia em tamanho de festa.' },
       { id: 'mini-churros', name: 'Mini Churros Espanhol', category: 'doces', price: 1, image: 'assets/banner-cardapio.jpeg', description: 'Um docinho para fechar o pedido com carinho.' },
-      { id: 'pudim', name: 'Pudim Caseiro', category: 'doces', price: null, image: 'assets/pudim.jpg', description: 'Sobremesa caseira. Consulte o valor pelo WhatsApp.' }
+      { id: 'pudim', name: 'Pudim Caseiro', category: 'doces', price: null, image: 'assets/pudim.jpg', description: 'Sobremesa caseira. Consulte o valor pelo WhatsApp.' },
+      { id: 'cento-salgados-variados', name: 'Cento de Salgados Variados', category: 'centos', price: 100, unitLabel: 'cento', image: 'assets/salgados-sortidos.jpg', description: '100 unidades. Combine os sabores disponíveis pelo WhatsApp.' }
     ];
-    const beverages = [
+    const fallbackBeverages = [
       { id: 'kapo-laranja', name: 'Del Valle Kapo Laranja', category: 'sucos', image: 'assets/bebidas/kapo-laranja.jpg', description: 'Suco de caixinha · 200 ml' },
       { id: 'kapo-abacaxi', name: 'Del Valle Kapo Abacaxi', category: 'sucos', image: 'assets/bebidas/kapo-abacaxi.webp', description: 'Suco de caixinha · 200 ml' },
       { id: 'kapo-morango', name: 'Del Valle Kapo Morango', category: 'sucos', image: 'assets/bebidas/kapo-morango.jpg', description: 'Suco de caixinha · 200 ml' },
@@ -472,14 +465,104 @@
       { id: 'coca-zero-2l', name: 'Coca-Cola Sem Açúcar', category: 'refrigerantes', image: 'assets/bebidas/coca-zero-2l.jpg', description: 'Garrafa PET · 2 L' },
       { id: 'fanta-laranja-2l', name: 'Fanta Laranja', category: 'refrigerantes', image: 'assets/bebidas/fanta-laranja-2l.jpg', description: 'Garrafa PET · 2 L' }
     ];
-    const quantities = Object.fromEntries(products.map(function(product) { return [product.id, 0]; }));
-    const beverageQuantities = Object.fromEntries(beverages.map(function(beverage) { return [beverage.id, 0]; }));
+    let products = fallbackProducts;
+    let beverages = fallbackBeverages;
+    let productCategories = [
+      { id: 'salgados', name: 'Salgados', catalog: 'products' },
+      { id: 'doces', name: 'Doces', catalog: 'products' },
+      { id: 'centos', name: 'Centos de salgados', catalog: 'products' }
+    ];
+    let beverageCategories = [
+      { id: 'refrigerantes', name: 'Refrigerantes', catalog: 'beverages' },
+      { id: 'sucos', name: 'Sucos', catalog: 'beverages' },
+      { id: 'agua', name: 'Água', catalog: 'beverages' }
+    ];
+    let quantities = Object.fromEntries(products.map(function(product) { return [product.id, 0]; }));
+    let beverageQuantities = Object.fromEntries(beverages.map(function(beverage) { return [beverage.id, 0]; }));
     const grid = document.getElementById('product-grid');
     const beverageGrid = document.getElementById('beverage-grid');
+    const productFilters = document.getElementById('product-filters');
+    const beverageFilters = document.getElementById('beverage-filters');
+    const productNotice = document.getElementById('products-notice');
+    const beverageNotice = document.getElementById('beverages-notice');
     const total = document.getElementById('total');
     const summary = document.getElementById('selection-summary');
     const toast = document.getElementById('toast');
     let toastTimer;
+    let activeProductFilter = 'todos';
+    let activeBeverageFilter = 'todos';
+
+    function escapeHTML(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, function(character) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+      });
+    }
+    function makeFilters(container, categories, allLabel, active, onSelect) {
+      const options = [{ id: 'todos', name: allLabel }].concat(categories);
+      container.innerHTML = options.map(function(category) {
+        return '<button class="filter' + (category.id === active ? ' active' : '') + '" type="button" data-filter="' + escapeHTML(category.id) + '">' + escapeHTML(category.name) + '</button>';
+      }).join('');
+      container.onclick = function(event) {
+        const button = event.target.closest('button[data-filter]');
+        if (!button) return;
+        onSelect(button.dataset.filter);
+      };
+    }
+    function updateFilters() {
+      makeFilters(productFilters, productCategories, 'Todos', activeProductFilter, function(filter) {
+        activeProductFilter = filter;
+        renderProducts(filter);
+        updateFilters();
+      });
+      makeFilters(beverageFilters, beverageCategories, 'Todas', activeBeverageFilter, function(filter) {
+        activeBeverageFilter = filter;
+        renderBeverages(filter);
+        updateFilters();
+      });
+    }
+    function refreshQuantities() {
+      const nextProducts = {};
+      const nextBeverages = {};
+      products.forEach(function(product) { nextProducts[product.id] = quantities[product.id] || 0; });
+      beverages.forEach(function(beverage) { nextBeverages[beverage.id] = beverageQuantities[beverage.id] || 0; });
+      quantities = nextProducts;
+      beverageQuantities = nextBeverages;
+    }
+    async function loadLiveCatalog() {
+      const apiBase = window.NANE_CONFIG && window.NANE_CONFIG.API_BASE_URL;
+      if (!apiBase) return;
+      try {
+        const response = await fetch(apiBase.replace(/\/$/, '') + '/api/catalog', { cache: 'no-store' });
+        if (!response.ok) return;
+        const catalog = await response.json();
+        if (!Array.isArray(catalog.products) || !Array.isArray(catalog.beverages)) return;
+        products = catalog.products.filter(function(item) { return item.active !== false; });
+        beverages = catalog.beverages.filter(function(item) { return item.active !== false; });
+        if (Array.isArray(catalog.categories)) {
+          productCategories = catalog.categories.filter(function(item) { return item.catalog === 'products'; });
+          beverageCategories = catalog.categories.filter(function(item) { return item.catalog === 'beverages'; });
+        }
+        refreshQuantities();
+        updateFilters();
+        renderProducts(activeProductFilter);
+        renderBeverages(activeBeverageFilter);
+        updateOrder();
+        const knownPrices = products.filter(function(item) { return item.price != null; }).map(function(item) { return Number(item.price); });
+        if (knownPrices.length && knownPrices.every(function(price) { return price === knownPrices[0]; })) {
+          productNotice.innerHTML = '<strong>' + money(knownPrices[0]) + ' por unidade</strong> · Selecione a quantidade desejada e confira o pedido antes de enviar.';
+        } else if (knownPrices.length) {
+          productNotice.innerHTML = '<strong>Valores conforme a unidade indicada em cada item.</strong> Confira seu pedido antes de enviar.';
+        } else {
+          productNotice.innerHTML = '<strong>Consulte os valores pelo WhatsApp.</strong> Confira seu pedido antes de enviar.';
+        }
+        const unpricedDrinks = beverages.filter(function(item) { return item.price == null; }).length;
+        beverageNotice.innerHTML = unpricedDrinks
+          ? '<strong>Preços a definir</strong> · A disponibilidade e o valor serão confirmados pelo WhatsApp.'
+          : '<strong>Preços atualizados</strong> · Valores exibidos por unidade.';
+      } catch (error) {
+        console.info('Catálogo online indisponível; mostrando os itens salvos no site.', error);
+      }
+    }
 
     function money(value) {
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -487,16 +570,18 @@
     function renderProducts(filter) {
       const visibleProducts = products.filter(function(product) { return filter === 'todos' || product.category === filter; });
       grid.innerHTML = visibleProducts.map(function(product) {
-        const priceText = product.price === null ? 'Consulte' : money(product.price);
-        const unitText = product.price === null ? 'preço pelo WhatsApp' : 'por unidade';
+        const priceText = product.price == null ? 'Consulte' : money(Number(product.price));
+        const unitText = product.price == null ? 'preço pelo WhatsApp' : 'por ' + (product.unitLabel || 'unidade');
+        const safeId = escapeHTML(product.id);
+        const safeName = escapeHTML(product.name);
         return '<article class="product">' +
-          '<div class="product-image-wrap"><img class="product-image" src="' + product.image + '" alt="' + product.name + '" loading="lazy"></div>' +
-          '<div class="product-body"><h3>' + product.name + '</h3><p>' + product.description + '</p>' +
+          '<div class="product-image-wrap"><img class="product-image" src="' + escapeHTML(product.image || 'assets/salgados-sortidos.jpg') + '" alt="' + safeName + '" loading="lazy"></div>' +
+          '<div class="product-body"><h3>' + safeName + '</h3><p>' + escapeHTML(product.description) + '</p>' +
           '<div class="product-bottom"><div class="price">' + priceText + '<small>' + unitText + '</small></div>' +
-          '<div class="stepper" aria-label="Quantidade de ' + product.name + '">' +
-          '<button type="button" data-change="-1" data-id="' + product.id + '" aria-label="Diminuir ' + product.name + '">−</button>' +
-          '<output id="qty-' + product.id + '" aria-live="polite">' + quantities[product.id] + '</output>' +
-          '<button type="button" data-change="1" data-id="' + product.id + '" aria-label="Adicionar ' + product.name + '">+</button>' +
+          '<div class="stepper" aria-label="Quantidade de ' + safeName + '">' +
+          '<button type="button" data-change="-1" data-id="' + safeId + '" aria-label="Diminuir ' + safeName + '">−</button>' +
+          '<output id="qty-' + safeId + '" aria-live="polite">' + (quantities[product.id] || 0) + '</output>' +
+          '<button type="button" data-change="1" data-id="' + safeId + '" aria-label="Adicionar ' + safeName + '">+</button>' +
           '</div></div></div></article>';
       }).join('');
     }
@@ -504,14 +589,18 @@
       const visibleBeverages = beverages.filter(function(beverage) { return filter === 'todos' || beverage.category === filter; });
       beverageGrid.innerHTML = visibleBeverages.map(function(beverage) {
         const packageSize = beverage.description.split('· ')[1];
+        const safeId = escapeHTML(beverage.id);
+        const safeName = escapeHTML(beverage.name);
+        const drinkPrice = beverage.price == null ? 'A definir' : money(Number(beverage.price));
+        const drinkNote = beverage.price == null ? 'preço depois' : 'por unidade';
         return '<article class="product">' +
-          '<div class="beverage-image-wrap"><img class="beverage-image" src="' + beverage.image + '" alt="' + beverage.name + ', embalagem de ' + packageSize + '" loading="lazy"></div>' +
-          '<div class="product-body"><h3>' + beverage.name + '</h3><p>' + beverage.description + '</p>' +
-          '<div class="product-bottom"><div class="price drink-price">A definir<small>preço depois</small></div>' +
-          '<div class="stepper" aria-label="Quantidade de ' + beverage.name + ' ' + beverage.description + '">' +
-          '<button type="button" data-beverage-change="-1" data-id="' + beverage.id + '" aria-label="Diminuir ' + beverage.name + '">−</button>' +
-          '<output id="qty-' + beverage.id + '" aria-live="polite">' + beverageQuantities[beverage.id] + '</output>' +
-          '<button type="button" data-beverage-change="1" data-id="' + beverage.id + '" aria-label="Adicionar ' + beverage.name + '">+</button>' +
+          '<div class="beverage-image-wrap"><img class="beverage-image" src="' + escapeHTML(beverage.image || 'assets/bebidas/agua-crystal-500ml.jpg') + '" alt="' + safeName + ', embalagem de ' + escapeHTML(packageSize) + '" loading="lazy"></div>' +
+          '<div class="product-body"><h3>' + safeName + '</h3><p>' + escapeHTML(beverage.description) + '</p>' +
+          '<div class="product-bottom"><div class="price drink-price">' + drinkPrice + '<small>' + drinkNote + '</small></div>' +
+          '<div class="stepper" aria-label="Quantidade de ' + safeName + ' ' + escapeHTML(beverage.description) + '">' +
+          '<button type="button" data-beverage-change="-1" data-id="' + safeId + '" aria-label="Diminuir ' + safeName + '">−</button>' +
+          '<output id="qty-' + safeId + '" aria-live="polite">' + (beverageQuantities[beverage.id] || 0) + '</output>' +
+          '<button type="button" data-beverage-change="1" data-id="' + safeId + '" aria-label="Adicionar ' + safeName + '">+</button>' +
           '</div></div></div></article>';
       }).join('');
     }
@@ -522,19 +611,20 @@
       const chosenBeverages = beverages.filter(function(beverage) { return beverageQuantities[beverage.id] > 0; });
       chosen.forEach(function(product) {
         unitCount += quantities[product.id];
-        if (product.price !== null) pricedTotal += product.price * quantities[product.id];
+        if (product.price != null) pricedTotal += Number(product.price) * quantities[product.id];
         const output = document.getElementById('qty-' + product.id);
         if (output) output.textContent = quantities[product.id];
       });
       chosenBeverages.forEach(function(beverage) {
         unitCount += beverageQuantities[beverage.id];
+        if (beverage.price != null) pricedTotal += Number(beverage.price) * beverageQuantities[beverage.id];
         const output = document.getElementById('qty-' + beverage.id);
         if (output) output.textContent = beverageQuantities[beverage.id];
       });
       total.textContent = money(pricedTotal);
       const itemCount = chosen.length + chosenBeverages.length;
       if (!itemCount) summary.textContent = 'Ainda não há itens selecionados.';
-      else summary.textContent = unitCount + (unitCount === 1 ? ' unidade selecionada' : ' unidades selecionadas') + ' · ' + itemCount + (itemCount === 1 ? ' item' : ' itens') + (chosenBeverages.length ? ' · ' + chosenBeverages.length + (chosenBeverages.length === 1 ? ' bebida' : ' bebidas') : '');
+      else summary.textContent = unitCount + (unitCount === 1 ? ' quantidade selecionada' : ' quantidades selecionadas') + ' · ' + itemCount + (itemCount === 1 ? ' produto' : ' produtos') + (chosenBeverages.length ? ' · ' + chosenBeverages.length + (chosenBeverages.length === 1 ? ' bebida' : ' bebidas') : '');
     }
     function showToast(message) {
       toast.textContent = message;
@@ -583,17 +673,22 @@
       }
       const orderLines = chosen.map(function(product) {
         const amount = quantities[product.id];
-        const lineTotal = product.price === null ? 'valor a confirmar' : money(product.price * amount);
-        return '• ' + amount + ' x ' + product.name + ' — ' + lineTotal;
+        const lineTotal = product.price == null ? 'valor a confirmar' : money(Number(product.price) * amount);
+        const unitNote = product.unitLabel === 'cento' ? ' (100 salgados)' : '';
+        return '• ' + amount + ' x ' + product.name + unitNote + ' — ' + lineTotal;
       });
       chosenBeverages.forEach(function(beverage) {
         const packageSize = beverage.description.split('· ')[1];
-        orderLines.push('• ' + beverageQuantities[beverage.id] + ' x ' + beverage.name + ' (' + packageSize + ') — preço a definir');
+        const lineTotal = beverage.price == null ? 'preço a definir' : money(Number(beverage.price) * beverageQuantities[beverage.id]);
+        orderLines.push('• ' + beverageQuantities[beverage.id] + ' x ' + beverage.name + ' (' + packageSize + ') — ' + lineTotal);
       });
       const pricedTotal = chosen.reduce(function(sum, product) {
-        return sum + (product.price === null ? 0 : product.price * quantities[product.id]);
+        return sum + (product.price == null ? 0 : Number(product.price) * quantities[product.id]);
+      }, 0) + chosenBeverages.reduce(function(sum, beverage) {
+        return sum + (beverage.price == null ? 0 : Number(beverage.price) * beverageQuantities[beverage.id]);
       }, 0);
-      const unknownItems = chosen.filter(function(product) { return product.price === null; }).map(function(product) { return product.name; });
+      const unknownItems = chosen.filter(function(product) { return product.price == null; }).map(function(product) { return product.name; })
+        .concat(chosenBeverages.filter(function(beverage) { return beverage.price == null; }).map(function(beverage) { return beverage.name; }));
       const name = document.getElementById('customer-name').value.trim();
       const note = document.getElementById('delivery-note').value.trim();
       let message = 'Ol\u00e1, Nane! Quero fazer este pedido:\n\n' + orderLines.join('\n') +
@@ -601,13 +696,15 @@
       if (unknownItems.length) message += '\nA confirmar: ' + unknownItems.join(', ');
       if (name) message += '\nNome: ' + name;
       if (note) message += '\nEntrega/observa\u00e7\u00e3o: ' + note;
-      message += '\n\nPor favor, confirme disponibilidade, valores das bebidas e entrega. Vim pelo site.';
+      message += '\n\nPor favor, confirme disponibilidade e entrega. Vim pelo site.';
       const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
       window.open(url, '_blank', 'noopener,noreferrer');
     });
+    updateFilters();
     renderProducts('todos');
     renderBeverages('todos');
     updateOrder();
+    loadLiveCatalog();
   </script>
 </body>
 </html>

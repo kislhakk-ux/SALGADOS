@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5e8d8">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Painel de Catálogo · Nane Salgados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script defer src="admin.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://salgados-1.onrender.com/" target="_blank" rel="noopener noreferrer">
+      <span class="brand-mark">NS</span><span><strong>Nane Salgados</strong><small>Painel de catálogo</small></span>
+    </a>
+    <div class="top-actions"><a class="store-link" href="https://salgados-1.onrender.com/" target="_blank" rel="noopener noreferrer">Ver loja ↗</a><button id="logout" class="quiet hidden" type="button">Sair</button></div>
+  </header>
+
+  <main class="page-wrap">
+    <section id="login-card" class="login-card">
+      <span class="eyebrow">Área exclusiva</span>
+      <h1>Seu catálogo, do seu jeito.</h1>
+      <p>Entre para adicionar produtos, organizar categorias, atualizar preços e trocar fotos da loja.</p>
+      <form id="login-form">
+        <label for="password">Senha do painel</label>
+        <input id="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Digite a senha configurada no Render">
+        <button class="primary" type="submit">Entrar no painel <span>→</span></button>
+      </form>
+      <div id="login-message" class="message" role="status"></div>
+      <p class="login-note">O painel usa uma senha privada configurada na hospedagem.</p>
+    </section>
+
+    <section id="panel" class="hidden">
+      <div class="page-heading">
+        <div><span class="eyebrow">Gestão do cardápio</span><h1>Olá, Nane <span aria-hidden="true">♡</span></h1><p>As alterações salvas aqui aparecem na loja depois da atualização do Render.</p></div>
+        <button id="save-all" class="primary save-button" type="button" disabled>Salvar alterações</button>
+      </div>
+      <div id="app-message" class="message" role="status"></div>
+
+      <div class="catalog-switch" role="tablist" aria-label="Catálogo">
+        <button class="catalog-tab active" type="button" role="tab" aria-selected="true" data-catalog="products">Salgados, centos e doces</button>
+        <button class="catalog-tab" type="button" role="tab" aria-selected="false" data-catalog="beverages">Bebidas</button>
+      </div>
+
+      <div class="workspace">
+        <section class="editor-card">
+          <div class="card-heading"><div><span class="eyebrow">Produto</span><h2 id="form-title">Adicionar item</h2></div><span class="heart">♡</span></div>
+          <form id="product-form">
+            <input id="product-id" type="hidden">
+            <label for="name">Nome do produto</label>
+            <input id="name" type="text" maxlength="100" required placeholder="Ex.: Coxinha de frango">
+            <label for="category">Categoria</label>
+            <select id="category" required></select>
+            <div class="two-col">
+              <div><label for="price">Preço em reais</label><input id="price" type="text" inputmode="decimal" placeholder="Deixe em branco para combinar"></div>
+              <div><label for="unit">Vendido por</label><select id="unit"><option value="unidade">Unidade</option><option value="cento">Cento (100 salgados)</option><option value="dúzia">Dúzia</option><option value="kit">Kit</option><option value="caixa">Caixa</option><option value="garrafa">Garrafa</option><option value="lata">Lata</option></select></div>
+            </div>
+            <label for="description">Descrição e tamanho</label>
+            <textarea id="description" rows="3" maxlength="500" placeholder="Ex.: Lata de 350 ml ou sabores que fazem parte do cento"></textarea>
+            <label for="photo">Foto do produto</label>
+            <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
+            <p class="field-help">A foto é ajustada automaticamente para caber no site.</p>
+            <div class="image-preview hidden" id="image-preview-wrap"><img id="image-preview" alt="Prévia da foto escolhida"><span id="image-preview-label">Foto do produto</span><button type="button" id="remove-photo" aria-label="Remover foto">×</button></div>
+            <div class="form-actions"><button class="primary" id="submit-product" type="submit">Adicionar ao catálogo</button><button class="secondary hidden" id="cancel-edit" type="button">Cancelar edição</button></div>
+          </form>
+
+          <div class="category-add">
+            <div><span class="eyebrow">Organização</span><h3>Nova categoria</h3></div>
+            <form id="category-form" class="category-form"><input id="new-category" type="text" maxlength="60" required placeholder="Ex.: Centos mistos"><button class="secondary" type="submit">Adicionar</button></form>
+          </div>
+        </section>
+
+        <section class="list-card">
+          <div class="list-heading"><div><span class="eyebrow">Catálogo atual</span><h2 id="list-title">Salgados, centos e doces</h2></div><span id="item-count" class="count-pill">0 itens</span></div>
+          <div class="list-tools"><label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar produto"></label><select id="filter-category" aria-label="Filtrar por categoria"><option value="all">Todas as categorias</option></select></div>
+          <div id="product-list" class="product-list"></div>
+          <p class="list-note">Para remover um item da loja, use “Ocultar”. Ele fica guardado aqui para você poder ativá-lo depois.</p>
+        </section>
+      </div>
+      <div class="footer-note">As fotos e o catálogo ficam guardados junto ao repositório do site. O serviço gratuito do painel pode demorar um pouco para acordar depois de ficar parado.</div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
