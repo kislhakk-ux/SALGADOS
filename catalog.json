@@ -298,9 +298,9 @@
       "id": "coca-cola-2l",
       "name": "Coca-Cola Original",
       "category": "refrigerantes",
-      "price": null,
+      "price": 11,
       "unitLabel": "unidade",
-      "image": "assets/uploads/whatsapp-image-2026-10-16-at-11-26-mvblkpgu.jpg",
+      "image": "assets/uploads/1000907065-mvbnvu82.jpg",
       "description": "Garrafa PET · 2 L",
       "active": true
     },
