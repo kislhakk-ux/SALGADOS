@@ -136,10 +136,10 @@
       "id": "pudim",
       "name": "Pudim Caseiro",
       "category": "doces",
-      "price": null,
+      "price": 65,
       "unitLabel": "unidade",
-      "image": "assets/pudim.jpg",
-      "description": "Sobremesa caseira. Consulte o valor pelo WhatsApp.",
+      "image": "assets/uploads/1000906988-mvbnetj5.jpg",
+      "description": "Pudim caseiro de 1 kg",
       "active": true
     },
     {
