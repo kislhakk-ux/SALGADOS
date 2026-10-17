@@ -164,11 +164,11 @@
     },
     {
       "id": "coxinha-de-frango",
-      "name": "Coxinha de frango",
+      "name": "Mini bolo vulcão",
       "category": "salgados",
-      "price": null,
+      "price": 15,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906976-mvbmf2v4.jpg",
+      "image": "assets/uploads/1000907053-mvbni86v.jpg",
       "description": "",
       "active": true
     }
