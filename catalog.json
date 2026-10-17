@@ -171,6 +171,16 @@
       "image": "assets/uploads/1000907053-mvbni86v.jpg",
       "description": "",
       "active": true
+    },
+    {
+      "id": "bolo-caseiro",
+      "name": "Bolo caseiro",
+      "category": "doces",
+      "price": null,
+      "unitLabel": "unidade",
+      "image": "assets/uploads/1000907054-mvbnkv6z.jpg",
+      "description": "",
+      "active": true
     }
   ],
   "beverages": [
