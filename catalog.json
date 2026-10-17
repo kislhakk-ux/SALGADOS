@@ -154,12 +154,12 @@
     },
     {
       "id": "coxinha-de-carde",
-      "name": "Coxinha de carde",
-      "category": "salgados",
-      "price": 1,
+      "name": "Mini pudim",
+      "category": "doces",
+      "price": 10,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906976-mvbmelbp.jpg",
-      "description": "",
+      "image": "assets/uploads/1000906989-mvbnfwra.jpg",
+      "description": "Mini pudim de 140 ml",
       "active": true
     },
     {
