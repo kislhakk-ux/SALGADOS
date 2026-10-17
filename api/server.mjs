@@ -90,6 +90,11 @@ function validateCatalog(value) {
   if (!value || !Array.isArray(value.categories) || !Array.isArray(value.products) || !Array.isArray(value.beverages)) {
     throw new Error('O catálogo precisa conter categorias, produtos e bebidas.');
   }
+  if (!value.banners || typeof value.banners !== 'object' || Array.isArray(value.banners)) value.banners = {};
+  if (value.banners.menuImage == null || value.banners.menuImage === '') value.banners.menuImage = 'assets/banner-cardapio.jpeg';
+  if (typeof value.banners.menuImage !== 'string' || !/^assets\/[a-zA-Z0-9._/-]{1,240}$/.test(value.banners.menuImage) || value.banners.menuImage.includes('..')) {
+    throw new Error('A imagem do banner precisa estar na pasta de imagens do catálogo.');
+  }
   if (value.categories.length > 100 || value.products.length > 500 || value.beverages.length > 200) {
     throw new Error('O catálogo ultrapassou o limite de itens.');
   }

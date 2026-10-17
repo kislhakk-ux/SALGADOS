@@ -9,8 +9,11 @@
   let catalog = { categories: [], products: [], beverages: [] };
   let currentCatalog = 'products';
   let selectedFile = null;
+  let selectedBannerFile = null;
+  let bannerPreviewUrl = '';
   let dirty = false;
   let toastTimer;
+  const defaultBannerImage = 'assets/banner-cardapio.jpeg';
 
   function setMessage(element, text, kind = '') {
     element.textContent = text;
@@ -104,8 +107,11 @@
     const data = await request('/api/admin/catalog');
     if (!Array.isArray(data.categories) || !Array.isArray(data.products) || !Array.isArray(data.beverages)) throw new Error('O formato do catálogo está incompleto.');
     catalog = data;
+    if (!catalog.banners || typeof catalog.banners !== 'object' || Array.isArray(catalog.banners)) catalog.banners = {};
+    if (typeof catalog.banners.menuImage !== 'string' || !catalog.banners.menuImage) catalog.banners.menuImage = defaultBannerImage;
     drawCategories();
     drawList();
+    drawBannerPreview();
     resetForm();
     setDirty(false);
   }
@@ -122,6 +128,22 @@
     if (!path) return '';
     const encodedPath = path.split('/').map(encodeURIComponent).join('/');
     return `https://raw.githubusercontent.com/kislhakk-ux/SALGADOS/main/${encodedPath}`;
+  }
+
+  function drawBannerPreview() {
+    const preview = $('#menu-banner-preview');
+    if (bannerPreviewUrl) URL.revokeObjectURL(bannerPreviewUrl);
+    bannerPreviewUrl = '';
+    if (selectedBannerFile) {
+      bannerPreviewUrl = URL.createObjectURL(selectedBannerFile);
+      preview.src = bannerPreviewUrl;
+      $('#menu-banner-caption').textContent = 'Nova foto selecionada · salve para publicar';
+      return;
+    }
+    preview.src = getImageUrl(catalog.banners?.menuImage || defaultBannerImage);
+    $('#menu-banner-caption').textContent = catalog.banners?.menuImage === defaultBannerImage
+      ? 'Imagem original da loja'
+      : 'Imagem atual da loja';
   }
 
   function drawList() {
@@ -269,12 +291,21 @@
     const button = $('#save-all');
     button.disabled = true;
     button.textContent = 'Salvando…';
-    setMessage($('#app-message'), 'Gravando alterações no catálogo…');
+    setMessage($('#app-message'), selectedBannerFile ? 'Enviando a nova foto e salvando as alterações…' : 'Gravando alterações no catálogo…');
     try {
+      if (selectedBannerFile) {
+        const photo = await compressImage(selectedBannerFile);
+        const savedPhoto = await request('/api/admin/images', { method: 'POST', body: JSON.stringify(photo) });
+        catalog.banners.menuImage = savedPhoto.image;
+        selectedBannerFile = null;
+        $('#menu-banner-photo').value = '';
+        drawBannerPreview();
+      }
       const result = await request('/api/admin/catalog', { method: 'PUT', body: JSON.stringify(catalog) });
       catalog = result.catalog;
       drawCategories();
       drawList();
+      drawBannerPreview();
       setDirty(false);
       setMessage($('#app-message'), 'Catálogo salvo. As alterações já podem aparecer na loja.', 'success');
     } catch (error) {
@@ -313,6 +344,21 @@
     $('#image-preview').src = URL.createObjectURL(selectedFile);
     $('#image-preview-label').textContent = selectedFile.name;
     $('#image-preview-wrap').classList.remove('hidden');
+  });
+  $('#menu-banner-photo').addEventListener('change', () => {
+    selectedBannerFile = $('#menu-banner-photo').files?.[0] || null;
+    if (!selectedBannerFile) return;
+    drawBannerPreview();
+    setDirty(true);
+    setMessage($('#app-message'), 'Nova foto do banner selecionada. Clique em Salvar alterações para publicar.', 'success');
+  });
+  $('#restore-menu-banner').addEventListener('click', () => {
+    selectedBannerFile = null;
+    $('#menu-banner-photo').value = '';
+    catalog.banners.menuImage = defaultBannerImage;
+    drawBannerPreview();
+    setDirty(true);
+    setMessage($('#app-message'), 'Imagem original selecionada. Clique em Salvar alterações para publicar.', 'success');
   });
   $('#remove-photo').addEventListener('click', () => {
     selectedFile = null;

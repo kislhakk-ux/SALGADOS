@@ -27,6 +27,7 @@ Salve e faça um deploy. A loja continua mostrando o catálogo básico se a API 
 
 - A senha protege as alterações do catálogo.
 - Há listas separadas para salgados/doces/centos e bebidas.
+- O banner ilustrado do cardápio no fim da loja também pode ser atualizado pelo painel, com prévia e restauração da imagem original.
 - Você pode criar categorias, adicionar itens, alterar nome, descrição, preço, unidade, foto e visibilidade.
 - Um cento pode ser cadastrado como produto com unidade `Cento (100 salgados)` e descrição com os sabores escolhidos.
 - Os produtos ocultados continuam guardados no catálogo e podem ser reativados.

@@ -1,4 +1,7 @@
 {
+  "banners": {
+    "menuImage": "assets/banner-cardapio.jpeg"
+  },
   "categories": [
     {
       "id": "salgados",

@@ -44,6 +44,22 @@
       </div>
       <div id="app-message" class="message" role="status"></div>
 
+      <section class="banner-editor" aria-labelledby="banner-editor-title">
+        <div class="banner-editor-copy">
+          <span class="eyebrow">Imagem da loja</span>
+          <h2 id="banner-editor-title">Banner do cardápio</h2>
+          <p>Esta é a arte comprida com as coxinhas e os outros salgados, que aparece no fim da loja.</p>
+          <label for="menu-banner-photo">Escolher outra foto</label>
+          <input id="menu-banner-photo" type="file" accept="image/jpeg,image/png,image/webp">
+          <p class="field-help">A imagem é ajustada automaticamente. Depois, clique em “Salvar alterações” para atualizar a loja.</p>
+          <button id="restore-menu-banner" class="secondary" type="button">Voltar à imagem original</button>
+        </div>
+        <figure class="menu-banner-preview">
+          <img id="menu-banner-preview" alt="Prévia do banner ilustrado do cardápio">
+          <figcaption id="menu-banner-caption">Imagem atual da loja</figcaption>
+        </figure>
+      </section>
+
       <div class="catalog-switch" role="tablist" aria-label="Catálogo">
         <button class="catalog-tab active" type="button" role="tab" aria-selected="true" data-catalog="products">Salgados, centos e doces</button>
         <button class="catalog-tab" type="button" role="tab" aria-selected="false" data-catalog="beverages">Bebidas</button>

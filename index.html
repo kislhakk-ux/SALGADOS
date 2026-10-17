@@ -537,7 +537,7 @@
           <h3>Mais opções para a sua festa</h3>
           <p>Confira o banner do cardápio e selecione no site os salgados disponíveis. Para outras opções, tamanhos ou sabores, fale com a Nane pelo WhatsApp.</p>
         </div>
-        <figure><img src="assets/banner-cardapio.jpeg" alt="Cardápio ilustrado da Nane com coxinhas, risoles, bolinha de pizza, enroladinho, kibe, mini pastel e mini churros"></figure>
+        <figure><img id="menu-banner-image" src="assets/banner-cardapio.jpeg" alt="Cardápio ilustrado da Nane com coxinhas, risoles, bolinha de pizza, enroladinho, kibe, mini pastel e mini churros"></figure>
       </div>
     </section>
   </main>
@@ -681,6 +681,11 @@
         if (Array.isArray(catalog.categories)) {
           productCategories = catalog.categories.filter(function(item) { return item.catalog === 'products'; });
           beverageCategories = catalog.categories.filter(function(item) { return item.catalog === 'beverages'; });
+        }
+        const bannerPath = catalog.banners && catalog.banners.menuImage;
+        const menuBannerImage = document.getElementById('menu-banner-image');
+        if (menuBannerImage && typeof bannerPath === 'string' && /^assets\/[a-zA-Z0-9._/-]{1,240}$/.test(bannerPath) && !bannerPath.includes('..')) {
+          menuBannerImage.src = apiBase.replace(/\/$/, '') + '/api/image?path=' + encodeURIComponent(bannerPath);
         }
         refreshQuantities();
         updateFilters();
