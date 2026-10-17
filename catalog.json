@@ -38,7 +38,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906976-mvbmjenh.jpg",
+      "image": "assets/uploads/1000906976-mvbmdg0i.jpg",
       "description": "Douradinha e crocante, perfeita para servir.",
       "active": true
     },
@@ -48,7 +48,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906976-mvbmki49.jpg",
+      "image": "assets/coxinhas.jpg",
       "description": "Um clássico para compartilhar em qualquer ocasião.",
       "active": true
     },
@@ -58,7 +58,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906977-mvbmkybu.jpg",
+      "image": "assets/salgados-artesanais.jpg",
       "description": "Massa empanada com recheio saboroso.",
       "active": true
     },
@@ -68,7 +68,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907025-mvbmr328.jpg",
+      "image": "assets/salgados-sortidos.jpg",
       "description": "Uma opção dourada para completar a mesa.",
       "active": true
     },
@@ -78,7 +78,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907018-mvbmriw2.jpg",
+      "image": "assets/salgados-sortidos.jpg",
       "description": "Sabor inspirado em um dos favoritos da família.",
       "active": true
     },
@@ -88,7 +88,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907035-mvbmuh1n.jpg",
+      "image": "assets/bolinhas-queijo.jpg",
       "description": "Pequena no tamanho, cheia de sabor.",
       "active": true
     },
@@ -98,7 +98,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907036-mvbmyt59.jpg",
+      "image": "assets/bandeja-festa.jpg",
       "description": "Uma escolha que agrada a toda a turma.",
       "active": true
     },
@@ -108,7 +108,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907037-mvbmzya3.jpg",
+      "image": "assets/bolinhos-crocantes.jpg",
       "description": "Crocante por fora e muito gostoso.",
       "active": true
     },
@@ -118,17 +118,17 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000907038-mvbn30y2.jpg",
+      "image": "assets/salgados-artesanais.jpg",
       "description": "Delícia em tamanho de festa.",
       "active": true
     },
     {
       "id": "mini-churros",
-      "name": "Mini Churros",
+      "name": "Mini Churros Espanhol",
       "category": "doces",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906998-mvbn3rzn.jpg",
+      "image": "assets/banner-cardapio.jpeg",
       "description": "Um docinho para fechar o pedido com carinho.",
       "active": true
     },
@@ -136,10 +136,10 @@
       "id": "pudim",
       "name": "Pudim Caseiro",
       "category": "doces",
-      "price": 60,
+      "price": null,
       "unitLabel": "unidade",
-      "image": "assets/uploads/1000906988-mvbn61js.jpg",
-      "description": "Sobremesa caseira. Pudim caseiro de 1k",
+      "image": "assets/pudim.jpg",
+      "description": "Sobremesa caseira. Consulte o valor pelo WhatsApp.",
       "active": true
     },
     {
@@ -148,8 +148,28 @@
       "category": "centos",
       "price": 100,
       "unitLabel": "cento",
-      "image": "assets/salgados-sortidos.jpg",
+      "image": "assets/uploads/1000907048-mvbn90i7.jpg",
       "description": "100 unidades. Combine os sabores disponíveis pelo WhatsApp.",
+      "active": true
+    },
+    {
+      "id": "coxinha-de-carde",
+      "name": "Coxinha de carde",
+      "category": "salgados",
+      "price": 1,
+      "unitLabel": "unidade",
+      "image": "assets/uploads/1000906976-mvbmelbp.jpg",
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "coxinha-de-frango",
+      "name": "Coxinha de frango",
+      "category": "salgados",
+      "price": null,
+      "unitLabel": "unidade",
+      "image": "assets/uploads/1000906976-mvbmf2v4.jpg",
+      "description": "",
       "active": true
     }
   ],
