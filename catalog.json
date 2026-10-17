@@ -124,11 +124,11 @@
     },
     {
       "id": "mini-churros",
-      "name": "Mini Churros Espanhol",
+      "name": "Mini Churros",
       "category": "doces",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/banner-cardapio.jpeg",
+      "image": "assets/uploads/1000906998-mvbn3rzn.jpg",
       "description": "Um docinho para fechar o pedido com carinho.",
       "active": true
     },
