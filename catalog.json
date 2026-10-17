@@ -68,7 +68,7 @@
       "category": "salgados",
       "price": 1,
       "unitLabel": "unidade",
-      "image": "assets/salgados-sortidos.jpg",
+      "image": "assets/uploads/1000907025-mvbmr328.jpg",
       "description": "Uma opção dourada para completar a mesa.",
       "active": true
     },
@@ -160,7 +160,7 @@
       "category": "sucos",
       "price": 100,
       "unitLabel": "unidade",
-      "image": "assets/bebidas/kapo-laranja.jpg",
+      "image": "assets/uploads/whatsapp-image-2026-10-16-at-11-26-mvblbsld.jpg",
       "description": "Suco de caixinha · 200 ml",
       "active": true
     },
@@ -200,7 +200,7 @@
       "category": "sucos",
       "price": null,
       "unitLabel": "unidade",
-      "image": "assets/bebidas/del-valle-uva-lata.jpg",
+      "image": "assets/uploads/whatsapp-image-2026-10-16-at-11-26-mvbljs7s.jpg",
       "description": "Lata · 290 ml",
       "active": true
     },
@@ -270,7 +270,7 @@
       "category": "refrigerantes",
       "price": null,
       "unitLabel": "unidade",
-      "image": "assets/bebidas/coca-cola-2l.jpg",
+      "image": "assets/uploads/whatsapp-image-2026-10-16-at-11-26-mvblkpgu.jpg",
       "description": "Garrafa PET · 2 L",
       "active": true
     },
