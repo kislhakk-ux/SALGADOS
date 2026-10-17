@@ -136,10 +136,10 @@
       "id": "pudim",
       "name": "Pudim Caseiro",
       "category": "doces",
-      "price": null,
+      "price": 60,
       "unitLabel": "unidade",
-      "image": "assets/pudim.jpg",
-      "description": "Sobremesa caseira. Consulte o valor pelo WhatsApp.",
+      "image": "assets/uploads/1000906988-mvbn61js.jpg",
+      "description": "Sobremesa caseira. Pudim caseiro de 1k",
       "active": true
     },
     {
