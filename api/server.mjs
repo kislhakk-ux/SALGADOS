@@ -25,9 +25,13 @@ const deviceCollectionName = 'adminDevices';
 let firestore = null;
 let firebaseMessaging = null;
 let firebaseInitError = null;
-if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+try {
+  const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    || (process.env.FIREBASE_SERVICE_ACCOUNT_FILE
+      ? await fs.readFile(process.env.FIREBASE_SERVICE_ACCOUNT_FILE, 'utf8')
+      : '');
+  if (serviceAccountJson) {
+    const serviceAccount = JSON.parse(serviceAccountJson);
     const appName = 'nane-agenda-api';
     const firebaseApp = getApps().find((item) => item.name === appName) || initializeApp({
       credential: cert(serviceAccount),
@@ -35,10 +39,10 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
     }, appName);
     firestore = getFirestore(firebaseApp);
     firebaseMessaging = getMessaging(firebaseApp);
-  } catch (error) {
-    firebaseInitError = error;
-    console.error('Firebase initialization failed:', error.message);
   }
+} catch (error) {
+  firebaseInitError = error;
+  console.error('Firebase initialization failed:', error.message);
 }
 let catalogCache = null;
 let catalogCacheExpiresAt = 0;
@@ -597,3 +601,4 @@ start().catch((error) => {
   console.error('API startup failed:', error.message);
   process.exit(1);
 });
+
