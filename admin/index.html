@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5e8d8">
   <meta name="robots" content="noindex,nofollow">
-  <title>Painel de Catálogo · Nane Salgados</title>
+  <title>Painel de Pedidos e Catálogo · Nane Salgados</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
 <body>
   <header class="topbar">
     <a class="brand" href="https://salgados-1.onrender.com/" target="_blank" rel="noopener noreferrer">
-      <span class="brand-mark">NS</span><span><strong>Nane Salgados</strong><small>Painel de catálogo</small></span>
+      <span class="brand-mark">NS</span><span><strong>Nane Salgados</strong><small>Painel de pedidos e catálogo</small></span>
     </a>
     <div class="top-actions"><a class="store-link" href="https://salgados-1.onrender.com/" target="_blank" rel="noopener noreferrer">Ver loja ↗</a><button id="logout" class="quiet hidden" type="button">Sair</button></div>
   </header>
@@ -39,10 +39,30 @@
 
     <section id="panel" class="hidden">
       <div class="page-heading">
-        <div><span class="eyebrow">Gestão do cardápio</span><h1>Olá, Nane <span aria-hidden="true">♡</span></h1><p>As alterações salvas aqui aparecem na loja automaticamente. Se a loja estiver aberta, ela atualiza em instantes.</p></div>
-        <button id="save-all" class="primary save-button" type="button" disabled>Salvar alterações</button>
+        <div><span class="eyebrow">Sua cozinha organizada</span><h1>Olá, Nane <span aria-hidden="true">♡</span></h1><p>Pedidos do site, agenda de encomendas e cardápio em um só painel.</p></div>
+        <button id="save-all" class="primary save-button hidden" type="button" disabled>Salvar alterações</button>
       </div>
       <div id="app-message" class="message" role="status"></div>
+
+      <nav class="main-tabs" role="tablist" aria-label="Áreas do painel">
+        <button class="main-tab active" type="button" role="tab" aria-selected="true" data-workspace="orders">📅 Pedidos e agendamentos</button>
+        <button class="main-tab" type="button" role="tab" aria-selected="false" data-workspace="catalog">🥟 Cardápio</button>
+      </nav>
+
+      <section id="orders-workspace" aria-labelledby="orders-title">
+        <div class="orders-heading"><div><span class="eyebrow">Agenda compartilhada</span><h2 id="orders-title">Pedidos e agendamentos</h2><p>Os pedidos feitos na loja aparecem aqui e no aplicativo Agenda Nane.</p></div><div class="orders-heading-actions"><button id="create-mobile-pairing" class="secondary" type="button">Conectar aplicativo ↗</button><button id="refresh-orders" class="secondary" type="button">↻ Atualizar</button></div></div>
+        <div id="mobile-pairing-card" class="mobile-pairing-card hidden" role="status" aria-live="polite"><div><strong>Conecte o Agenda Nane</strong><p id="mobile-pairing-expiry">Digite este código no aplicativo. Ele expira em 10 minutos.</p></div><output id="mobile-pairing-code" aria-label="Código para conectar o aplicativo"></output><button id="copy-mobile-pairing" class="secondary" type="button">Copiar código</button></div>
+        <div class="order-stats">
+          <article class="order-stat"><small>Pedidos ativos</small><strong id="order-stat-open">0</strong></article>
+          <article class="order-stat"><small>Para hoje</small><strong id="order-stat-today">0</strong></article>
+          <article class="order-stat"><small>Valores a receber</small><strong id="order-stat-balance">R$ 0,00</strong></article>
+        </div>
+        <div class="order-tools"><label class="search-box"><span aria-hidden="true">⌕</span><input id="order-search" type="search" placeholder="Buscar cliente, produto ou WhatsApp"></label><select id="order-status-filter" aria-label="Filtrar por status"><option value="todos">Todos os status</option><option>Aguardando confirmação</option><option>Confirmado</option><option>Em preparo</option><option>Pronto</option><option>Entregue</option><option>Cancelado</option></select><input id="order-date-filter" type="date" aria-label="Filtrar por data"></div>
+        <div id="orders-list" class="orders-list"><div class="empty-state">Carregando pedidos da agenda…</div></div>
+        <p class="list-note">Os dados dos clientes ficam no banco privado do servidor e só aparecem após entrar no painel.</p>
+      </section>
+
+      <div id="catalog-workspace" class="hidden">
 
       <section class="banner-editor" aria-labelledby="banner-editor-title">
         <div class="banner-editor-copy">
@@ -99,6 +119,7 @@
           <div id="product-list" class="product-list"></div>
           <p class="list-note">Para remover um item da loja, use “Ocultar”. Ele fica guardado aqui para você poder ativá-lo depois.</p>
         </section>
+      </div>
       </div>
       <div class="footer-note">As fotos e o catálogo ficam guardados junto ao repositório do site. O serviço gratuito do painel pode demorar um pouco para acordar depois de ficar parado.</div>
     </section>

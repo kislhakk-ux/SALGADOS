@@ -1,6 +1,14 @@
 node_modules/
 api/node_modules/
+android/.gradle/
+android/local.properties
+android/**/build/
+*.apk
+*firebase-adminsdk*.json
+serviceAccount*.json
 .env
 .env.*
 !.env.example
 *.log
+/site-config.js
+/admin/config.js

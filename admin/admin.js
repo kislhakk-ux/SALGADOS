@@ -7,6 +7,8 @@
   const tokenKey = 'nane-admin-token';
   let token = localStorage.getItem(tokenKey) || sessionStorage.getItem(tokenKey) || '';
   let catalog = { categories: [], products: [], beverages: [] };
+  let orders = [];
+  let currentWorkspace = 'orders';
   let currentCatalog = 'products';
   let selectedFile = null;
   let selectedBannerFile = null;
@@ -95,7 +97,9 @@
       $('#password').value = '';
       await loadCatalog();
       setLoggedIn(true);
+      switchWorkspace('orders');
       setMessage($('#login-message'), '');
+      await loadOrders().catch((error) => setMessage($('#app-message'), error.message, 'error'));
     } catch (error) {
       setMessage($('#login-message'), error.message, 'error');
     } finally {
@@ -114,6 +118,93 @@
     drawBannerPreview();
     resetForm();
     setDirty(false);
+  }
+
+  function localDateKey(date = new Date()) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  function orderBalance(order) {
+    return Math.max(0, Number(order.amount || 0) - Number(order.paid || 0));
+  }
+
+  function orderStatusClass(stage) {
+    if (stage === 'Entregue') return 'done';
+    if (stage === 'Cancelado') return 'cancelled';
+    if (stage === 'Pronto') return 'ready';
+    if (stage === 'Aguardando confirmação') return 'pending';
+    return '';
+  }
+
+  async function loadOrders() {
+    const result = await request('/api/admin/orders');
+    orders = Array.isArray(result.orders) ? result.orders : [];
+    renderOrders();
+  }
+
+  async function createMobilePairing() {
+    const button = $('#create-mobile-pairing');
+    button.disabled = true;
+    button.textContent = 'Gerando código…';
+    try {
+      const result = await request('/api/admin/mobile-pairing', { method: 'POST', body: '{}' });
+      $('#mobile-pairing-code').textContent = result.code;
+      $('#mobile-pairing-expiry').textContent = `Digite este código no aplicativo. Ele expira às ${new Date(result.expiresAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`;
+      $('#mobile-pairing-card').classList.remove('hidden');
+      setMessage($('#app-message'), 'Código do aplicativo gerado com segurança.', 'success');
+    } catch (error) {
+      setMessage($('#app-message'), error.message, 'error');
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Conectar aplicativo ↗';
+    }
+  }
+
+  function renderOrders() {
+    const today = localDateKey();
+    const active = orders.filter((order) => !['Entregue', 'Cancelado'].includes(order.stage));
+    const dueToday = active.filter((order) => order.date === today);
+    $('#order-stat-open').textContent = active.length;
+    $('#order-stat-today').textContent = dueToday.length;
+    $('#order-stat-balance').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+      .format(active.reduce((sum, order) => sum + orderBalance(order), 0));
+    const query = ($('#order-search')?.value || '').trim().toLocaleLowerCase('pt-BR');
+    const status = $('#order-status-filter')?.value || 'todos';
+    const date = $('#order-date-filter')?.value || '';
+    const list = [...orders].sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)).filter((order) => {
+      const text = `${order.client} ${order.phone} ${order.items} ${order.notes} ${order.address}`.toLocaleLowerCase('pt-BR');
+      return (status === 'todos' || order.stage === status) && (!date || order.date === date) && (!query || text.includes(query));
+    });
+    if (!list.length) {
+      $('#orders-list').innerHTML = '<div class="empty-state">Nenhum pedido encontrado. Os agendamentos feitos na loja aparecerão aqui. ♡</div>';
+      return;
+    }
+    const money = (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value || 0));
+    const statusChoices = ['Aguardando confirmação', 'Confirmado', 'Em preparo', 'Pronto', 'Entregue', 'Cancelado'];
+    $('#orders-list').innerHTML = list.map((order) => {
+      const displayDate = order.date ? new Date(`${order.date}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }) : 'Data não informada';
+      const phoneDigits = String(order.phone || '').replace(/\D/g, '');
+      const whatsappPhone = phoneDigits.length <= 11 ? `55${phoneDigits}` : phoneDigits;
+      const whatsappMessage = encodeURIComponent(`Olá, ${order.client}! Passando para confirmar seu pedido de ${order.items}, para ${displayDate} às ${order.time}. — Nane Salgados e Churros`);
+      return `<article class="order-admin-card" data-order-id="${escapeHTML(order.id)}">
+        <div class="order-admin-head"><div><h3>${escapeHTML(order.client)}</h3><div class="order-admin-sub">${escapeHTML(displayDate)} · ${escapeHTML(order.time || '')} · ${order.delivery === 'delivery' ? 'Entrega' : 'Retirada'}</div></div><span class="order-admin-status ${orderStatusClass(order.stage)}">${escapeHTML(order.stage || 'Aguardando confirmação')}</span></div>
+        <div class="order-admin-details"><p class="order-admin-items">${escapeHTML(order.items || 'Itens não informados')}${order.address ? `\n\nEndereço: ${escapeHTML(order.address)}` : ''}${order.notes ? `\nObservação: ${escapeHTML(order.notes)}` : ''}</p><p class="order-admin-contact">WhatsApp: <b>${escapeHTML(order.phone || 'Não informado')}</b><br>Total estimado: <b>${money(order.amount)}</b><br>Recebido: <b>${money(order.paid)}</b><br>Saldo: <b>${money(orderBalance(order))}</b></p></div>
+        <div class="order-admin-controls"><label>Etapa do pedido<select data-stage>${statusChoices.map((item) => `<option${item === order.stage ? ' selected' : ''}>${item}</option>`).join('')}</select></label><label>Valor recebido<input data-paid type="number" min="0" step="0.01" max="${Number(order.amount || 0)}" value="${Number(order.paid || 0)}"></label><div class="order-admin-actions">${phoneDigits.length >= 10 ? `<button type="button" data-whatsapp="https://wa.me/${escapeHTML(whatsappPhone)}?text=${whatsappMessage}">WhatsApp</button>` : ''}<button type="button" data-save-order>Salvar</button><button type="button" class="delete-order" data-delete-order>Excluir</button></div></div>
+      </article>`;
+    }).join('');
+  }
+
+  function switchWorkspace(workspace) {
+    currentWorkspace = workspace;
+    $('#orders-workspace').classList.toggle('hidden', workspace !== 'orders');
+    $('#catalog-workspace').classList.toggle('hidden', workspace !== 'catalog');
+    $('#save-all').classList.toggle('hidden', workspace !== 'catalog');
+    document.querySelectorAll('.main-tab').forEach((tab) => {
+      const active = tab.dataset.workspace === workspace;
+      tab.classList.toggle('active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+    if (workspace === 'orders') loadOrders().catch((error) => setMessage($('#app-message'), error.message, 'error'));
   }
 
   function drawCategories() {
@@ -380,12 +471,79 @@
     }
   });
   document.querySelectorAll('.catalog-tab').forEach((tab) => tab.addEventListener('click', () => switchCatalog(tab.dataset.catalog)));
+  document.querySelectorAll('.main-tab').forEach((tab) => tab.addEventListener('click', () => switchWorkspace(tab.dataset.workspace)));
+  $('#refresh-orders').addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    button.textContent = 'Atualizando…';
+    try { await loadOrders(); setMessage($('#app-message'), 'Agenda atualizada.', 'success'); }
+    catch (error) { setMessage($('#app-message'), error.message, 'error'); }
+    finally { button.disabled = false; button.textContent = '↻ Atualizar'; }
+  });
+  $('#create-mobile-pairing').addEventListener('click', createMobilePairing);
+  $('#copy-mobile-pairing').addEventListener('click', async () => {
+    const code = $('#mobile-pairing-code').textContent.trim();
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      notify('Código copiado.');
+    } catch {
+      setMessage($('#app-message'), 'Não foi possível copiar automaticamente. Anote o código mostrado no painel.', 'error');
+    }
+  });
+  $('#order-search').addEventListener('input', renderOrders);
+  $('#order-status-filter').addEventListener('change', renderOrders);
+  $('#order-date-filter').addEventListener('change', renderOrders);
+  $('#orders-list').addEventListener('click', async (event) => {
+    const card = event.target.closest('[data-order-id]');
+    if (!card) return;
+    const order = orders.find((item) => String(item.id) === card.dataset.orderId);
+    if (!order) return;
+    const whatsapp = event.target.closest('[data-whatsapp]');
+    if (whatsapp) { window.open(whatsapp.dataset.whatsapp, '_blank', 'noopener,noreferrer'); return; }
+    const remove = event.target.closest('[data-delete-order]');
+    if (remove) {
+      if (!window.confirm(`Excluir o pedido de ${order.client}?`)) return;
+      card.classList.add('order-saving');
+      try {
+        await request(`/api/admin/orders/${encodeURIComponent(order.id)}`, { method: 'DELETE' });
+        orders = orders.filter((item) => String(item.id) !== String(order.id));
+        renderOrders();
+        notify('Pedido excluído da agenda.');
+      } catch (error) {
+        card.classList.remove('order-saving');
+        setMessage($('#app-message'), error.message, 'error');
+      }
+      return;
+    }
+    const save = event.target.closest('[data-save-order]');
+    if (save) {
+      const next = { ...order, stage: card.querySelector('[data-stage]').value, paid: Number(card.querySelector('[data-paid]').value || 0) };
+      card.classList.add('order-saving');
+      try {
+        const result = await request(`/api/admin/orders/${encodeURIComponent(order.id)}`, { method: 'PUT', body: JSON.stringify(next) });
+        orders = orders.map((item) => String(item.id) === String(order.id) ? result.order : item);
+        renderOrders();
+        notify('Pedido atualizado.');
+      } catch (error) {
+        card.classList.remove('order-saving');
+        setMessage($('#app-message'), error.message, 'error');
+      }
+    }
+  });
 
   if (!apiBase) setMessage($('#login-message'), 'O link do serviço ainda precisa ser configurado no Render.', 'error');
   if (token) {
-    loadCatalog().then(() => setLoggedIn(true)).catch((error) => {
+    loadCatalog().then(() => {
+      setLoggedIn(true);
+      switchWorkspace('orders');
+      loadOrders().catch((error) => setMessage($('#app-message'), error.message, 'error'));
+    }).catch((error) => {
       logout(false);
       setMessage($('#login-message'), error.message, 'error');
     });
   }
+  window.setInterval(() => {
+    if (token && currentWorkspace === 'orders') loadOrders().catch((error) => setMessage($('#app-message'), error.message, 'error'));
+  }, 45_000);
 })();

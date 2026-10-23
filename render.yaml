@@ -18,6 +18,12 @@ services:
         value: SALGADOS
       - key: GITHUB_BRANCH
         value: main
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_FILE
+        value: /etc/secrets/nane-salgados-agenda-firebase-adminsdk-fbsvc-741ff4c72d.json
       - key: GITHUB_TOKEN
         sync: false
       - key: ADMIN_PASSWORD
@@ -25,18 +31,3 @@ services:
       - key: SESSION_SECRET
         generateValue: true
 
-  - type: web
-    name: nane-catalog-admin
-    runtime: static
-    buildCommand: node scripts/configure-admin.mjs
-    staticPublishPath: ./admin
-    buildFilter:
-      paths:
-        - admin/**
-        - scripts/configure-admin.mjs
-    envVars:
-      - key: PUBLIC_API_URL
-        fromService:
-          type: web
-          name: nane-catalog-api
-          envVarKey: RENDER_EXTERNAL_URL

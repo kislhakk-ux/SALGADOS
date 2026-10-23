@@ -1,0 +1,14 @@
+<resources>
+    <color name="brand_cream">#FFF8EF</color>
+    <color name="brand_brown">#714322</color>
+    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/brand_cream</item>
+        <item name="android:navigationBarColor">@color/brand_cream</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/brand_cream</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>
