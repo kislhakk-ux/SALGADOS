@@ -135,6 +135,18 @@
     h1 em { color: var(--rose); font-weight: 500; }
     .hero-copy > p { max-width: 590px; color: #725d55; font-size: 1.08rem; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 28px; }
+    .button-schedule { background: linear-gradient(110deg, #a64e48, #c87968); box-shadow: 0 9px 22px rgba(149,72,63,.2); }
+    .quick-actions { width: min(1120px, calc(100% - 40px)); margin: -17px auto 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .quick-action { min-height: 82px; display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 17px; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease; }
+    .quick-action:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(83,45,35,.12); }
+    .quick-action.choose { background: rgba(255,250,244,.95); border: 1px solid var(--line); }
+    .quick-action.schedule { color: white; background: linear-gradient(105deg, #9f4d46, #c27462); border: 1px solid #a9534b; box-shadow: 0 10px 22px rgba(169,94,78,.22); }
+    .quick-action-icon { width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 14px; background: #f5e7d9; font-size: 20px; }
+    .quick-action.schedule .quick-action-icon { background: rgba(255,255,255,.17); }
+    .quick-action-copy { flex: 1; }
+    .quick-action-copy strong { display: block; font: 500 1.1rem Georgia, serif; }
+    .quick-action-copy small { display: block; margin-top: 3px; font-size: .76rem; opacity: .84; }
+    .quick-action-arrow { font-size: 1.3rem; }
     .hero-points { display: flex; flex-wrap: wrap; gap: 16px 24px; color: var(--muted); font-size: .88rem; }
     .hero-points span:before { content: "✦"; color: var(--gold); margin-right: 7px; }
     .hero-art { position: relative; justify-self: center; width: min(100%, 390px); }
@@ -226,6 +238,19 @@
     .order-total span { color: var(--muted); font-size: .9rem; }
     .order-total strong { color: var(--rose-dark); font-size: 1.55rem; font-family: Georgia, serif; }
     .order-hint { color: var(--muted); font-size: .77rem; margin-bottom: 15px; }
+    .booking-panel { margin: 17px 0 13px; padding: 17px; border: 1px solid #e5bdb2; border-radius: 16px; background: linear-gradient(135deg,#fff0eb,#fffaf6 65%); box-shadow: 0 8px 22px rgba(149,72,63,.08); }
+    .booking-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .booking-title strong { display: block; color: var(--rose-dark); font: 500 1.18rem Georgia,serif; }
+    .booking-title small { display: block; margin-top: 3px; color: #86635c; font-size: .76rem; }
+    .booking-badge { flex: none; padding: 5px 9px; border-radius: 99px; color: #8e4943; background: #f8dcd4; font-size: .68rem; font-weight: 800; }
+    .booking-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    .booking-fields .field { min-width: 0; }
+    .booking-fields .full { grid-column: 1 / -1; }
+    .booking-fields .field label { font-size: .75rem; }
+    .booking-fields .field input, .booking-fields .field select { min-height: 42px; font-size: .89rem; }
+    .booking-submit { background: linear-gradient(110deg,#a64e48,#c87968); box-shadow: 0 8px 17px rgba(149,72,63,.18); }
+    .booking-feedback { min-height: 1.2em; margin: 8px 0 0; color: var(--rose-dark); font-size: .78rem; }
+    .booking-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
     .wide { width: 100%; }
     .banner-section { padding: 72px 20px; }
     .banner-row {
@@ -354,6 +379,10 @@
       .nav { display: none; }
       .header-cta { padding: 10px 13px; font-size: .8rem; }
       .hero { grid-template-columns: 1fr; margin-top: 0; padding-top: 28px; gap: 18px; }
+      .quick-actions { width: calc(100% - 28px); margin: -10px auto 25px; grid-template-columns: 1fr; gap: 9px; }
+      .quick-action { min-height: 72px; padding: 12px 14px; }
+      .quick-action-copy strong { font-size: 1rem; }
+      .quick-action-copy small { font-size: .7rem; }
       .hero-copy { padding: 10px 0 0; }
       h1 { font-size: clamp(2.6rem, 12vw, 4rem); }
       .hero-art { width: min(100%, 340px); }
@@ -370,6 +399,7 @@
       .stepper { align-self: flex-end; }
       .order-area { grid-template-columns: 1fr; }
       .order-card { padding: 18px; }
+      .booking-panel { padding: 14px; }
       .banner-section { padding: 54px 16px; }
       .banner-row { grid-template-columns: 1fr; gap: 24px; }
       .banner-card { width: min(100%, 330px); justify-self: center; }
@@ -390,6 +420,8 @@
       .stepper { gap: 5px; }
       .stepper button { width: 27px; height: 27px; }
       .order-fields { grid-template-columns: 1fr; }
+      .booking-fields { grid-template-columns: 1fr; }
+      .booking-fields .full { grid-column: auto; }
     }
   </style>
 </head>
@@ -451,7 +483,7 @@
     <nav class="nav" aria-label="Navegação principal">
       <a href="#catalogo">Cardápio</a>
       <a href="#bebidas">Bebidas</a>
-      <a href="#como-pedir">Como pedir</a>
+      <a href="#agendar">Agendar</a>
       <a href="#contato">Contato</a>
     </nav>
     <a class="button header-cta" href="https://wa.me/5567991226080?text=Ol%C3%A1%2C%20Nane!%20Vim%20pelo%20site." target="_blank" rel="noopener noreferrer">☏ <span>WhatsApp</span></a>
@@ -462,11 +494,10 @@
       <div class="hero-copy">
         <span class="eyebrow">Feito com amor para momentos especiais</span>
         <h1>Deixe sua festa mais <em>saborosa.</em></h1>
-        <p>Salgados, churros e delícias caseiras para compartilhar com quem você gosta. Monte seu pedido e envie direto para a Nane pelo WhatsApp.</p>
+        <p>Salgados, churros e delícias caseiras para compartilhar com quem você gosta. Escolha seus favoritos, agende a data e acompanhe a confirmação da Nane.</p>
         <div class="hero-actions">
           <a class="button" href="#catalogo">Escolher meus salgados <span aria-hidden="true">→</span></a>
-          <a class="button button-outline" href="#como-pedir">Como funciona</a>
-          <a class="button button-outline" href="#bebidas">Ver bebidas</a>
+          <a class="button button-schedule" href="#agendar">Fazer agendamento de salgados <span aria-hidden="true">↗</span></a>
         </div>
         <div class="hero-points"><span>Unidade indicada em cada item</span><span>Pedido mínimo: 2 horas</span><span>Ideal para festas</span></div>
       </div>
@@ -474,6 +505,11 @@
         <img src="assets/bandeja-festa.jpg" alt="Bandeja com variedade de salgadinhos para festas">
         </div>
     </section>
+
+    <nav class="quick-actions" aria-label="Atalhos de compra">
+      <a class="quick-action choose" href="#catalogo"><span class="quick-action-icon" aria-hidden="true">🥟</span><span class="quick-action-copy"><strong>Escolher meus salgados</strong><small>Veja o cardápio e monte seu pedido</small></span><span class="quick-action-arrow" aria-hidden="true">→</span></a>
+      <a class="quick-action schedule" href="#agendar"><span class="quick-action-icon" aria-hidden="true">📅</span><span class="quick-action-copy"><strong>Fazer agendamento de salgados</strong><small>Escolha a data e o horário para sua encomenda</small></span><span class="quick-action-arrow" aria-hidden="true">→</span></a>
+    </nav>
 
     <section class="section section-white" id="catalogo">
       <div class="section-head">
@@ -497,10 +533,11 @@
       <div class="product-grid" id="beverage-grid" aria-live="polite"></div>
     </section>
 
-    <section class="section" id="como-pedir">
+    <section class="section" id="agendar">
+      <span id="como-pedir" aria-hidden="true"></span>
       <div class="section-head">
-        <span class="eyebrow">Finalize sua encomenda</span>
-        <h2>Seu pedido</h2>
+        <span class="eyebrow">Agenda da Nane</span>
+        <h2>Agende sua encomenda</h2>
         <p id="selection-summary">Ainda não há itens selecionados.</p>
       </div>
       <div class="order-area">
@@ -514,17 +551,26 @@
           </ul>
         </div>
         <div class="order-card">
-          <h3>Conferir e enviar</h3>
-          <div class="field">
-            <label for="customer-name">Seu nome (opcional)</label>
-            <input id="customer-name" type="text" maxlength="60" placeholder="Como podemos te chamar?">
-          </div>
-          <div class="field" style="margin-top:12px">
-            <label for="delivery-note">Entrega ou observação (opcional)</label>
-            <input id="delivery-note" type="text" maxlength="120" placeholder="Bairro, endereço ou detalhe do pedido">
-          </div>
+          <h3>Conferir e agendar</h3>
           <div class="order-total"><span>Total estimado dos itens com preço</span><strong id="total">R$ 0,00</strong></div>
           <div class="order-hint">Bebidas e itens sem preço serão combinados na conversa.</div>
+          <form id="booking-form">
+            <div class="booking-panel">
+              <div class="booking-title"><div><strong>Fazer agendamento de salgados</strong><small>Seu pedido seguirá para a agenda da Nane.</small></div><span class="booking-badge">AGENDA ONLINE</span></div>
+              <div class="booking-fields">
+                <div class="field"><label for="customer-name">Seu nome *</label><input id="customer-name" name="client" type="text" maxlength="100" required autocomplete="name" placeholder="Como podemos te chamar?"></div>
+                <div class="field"><label for="customer-phone">WhatsApp *</label><input id="customer-phone" name="phone" type="tel" maxlength="20" required autocomplete="tel" inputmode="tel" placeholder="(67) 99999-9999"></div>
+                <div class="field"><label for="order-date">Data do pedido *</label><input id="order-date" name="date" type="date" required></div>
+                <div class="field"><label for="order-time">Horário *</label><input id="order-time" name="time" type="time" required></div>
+                <div class="field full"><label for="delivery-type">Como prefere receber? *</label><select id="delivery-type" name="delivery" required><option value="pickup">Retirada</option><option value="delivery">Entrega</option></select></div>
+                <div class="field full" id="address-field" hidden><label for="schedule-address">Endereço para entrega *</label><input id="schedule-address" name="address" type="text" maxlength="300" autocomplete="street-address" placeholder="Rua, número, bairro e complemento"></div>
+                <div class="field full"><label for="delivery-note">Observação (opcional)</label><input id="delivery-note" name="notes" type="text" maxlength="500" placeholder="Detalhes para preparar seu pedido"></div>
+                <label class="booking-honeypot" aria-hidden="true">Site<input id="booking-website" name="website" type="text" tabindex="-1" autocomplete="off"></label>
+              </div>
+              <button class="button wide booking-submit" type="submit" id="submit-schedule">Solicitar agendamento <span aria-hidden="true">♡</span></button>
+              <p class="booking-feedback" id="booking-feedback" role="status" aria-live="polite"></p>
+            </div>
+          </form>
           <button class="button wide" type="button" id="send-order">Enviar pedido pelo WhatsApp <span aria-hidden="true">↗</span></button>
         </div>
       </div>
@@ -916,6 +962,93 @@
       const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
       window.open(url, '_blank', 'noopener,noreferrer');
     }
+    async function submitBooking(event) {
+      event.preventDefault();
+      const feedback = document.getElementById('booking-feedback');
+      const button = document.getElementById('submit-schedule');
+      const chosenProducts = products.filter(function(product) { return quantities[product.id] > 0; });
+      const chosenBeverages = beverages.filter(function(beverage) { return beverageQuantities[beverage.id] > 0; });
+      if (!chosenProducts.length && !chosenBeverages.length) {
+        feedback.textContent = 'Escolha pelo menos um item no cardápio antes de agendar.';
+        showToast('Escolha seus salgados antes de agendar.');
+        return;
+      }
+      const apiBase = window.NANE_CONFIG && String(window.NANE_CONFIG.API_BASE_URL || '').replace(/\/$/, '');
+      if (!apiBase) {
+        feedback.textContent = 'A agenda online está sendo preparada. Por enquanto, envie seu pedido pelo WhatsApp.';
+        return;
+      }
+      const date = document.getElementById('order-date').value;
+      const time = document.getElementById('order-time').value;
+      const scheduledAt = new Date(date + 'T' + time);
+      if (!Number.isFinite(scheduledAt.getTime())) {
+        feedback.textContent = 'Confira a data e o horário escolhidos.';
+        return;
+      }
+      const items = chosenProducts.map(function(product) { return { id: product.id, quantity: quantities[product.id] }; })
+        .concat(chosenBeverages.map(function(beverage) { return { id: beverage.id, quantity: beverageQuantities[beverage.id] }; }));
+      const payload = {
+        client: document.getElementById('customer-name').value.trim(),
+        phone: document.getElementById('customer-phone').value.trim(),
+        date: date, time: time, scheduledAt: scheduledAt.toISOString(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo',
+        delivery: document.getElementById('delivery-type').value,
+        address: document.getElementById('schedule-address').value.trim(),
+        notes: document.getElementById('delivery-note').value.trim(),
+        website: document.getElementById('booking-website').value,
+        items: items
+      };
+      button.disabled = true;
+      button.textContent = 'Enviando para a agenda…';
+      feedback.textContent = 'Salvando seu pedido com segurança.';
+      try {
+        const response = await fetch(apiBase + '/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(function() { return {}; });
+        if (!response.ok) throw new Error(result.error || 'Não foi possível enviar o pedido. Tente novamente.');
+        if (result.id === 'received') {
+          feedback.textContent = 'Solicitação recebida. A Nane vai confirmar pelo WhatsApp. ♡';
+          document.getElementById('booking-form').reset();
+          document.getElementById('address-field').hidden = true;
+          document.getElementById('schedule-address').required = false;
+          return;
+        }
+        feedback.textContent = 'Pedido ' + result.id + ' enviado! A Nane vai confirmar pelo WhatsApp. ♡';
+        document.getElementById('booking-form').reset();
+        document.getElementById('address-field').hidden = true;
+        document.getElementById('schedule-address').required = false;
+        quantities = {};
+        beverageQuantities = {};
+        refreshQuantities();
+        renderProducts(activeProductFilter);
+        renderBeverages(activeBeverageFilter);
+        updateOrder();
+      } catch (error) {
+        feedback.textContent = error.message || 'A agenda não respondeu. Tente novamente ou envie pelo WhatsApp.';
+      } finally {
+        button.disabled = false;
+        button.innerHTML = 'Solicitar agendamento <span aria-hidden="true">♡</span>';
+      }
+    }
+    const bookingForm = document.getElementById('booking-form');
+    const orderDateInput = document.getElementById('order-date');
+    const orderTimeInput = document.getElementById('order-time');
+    const deliveryTypeInput = document.getElementById('delivery-type');
+    const todayLocal = new Date();
+    const tomorrowLocal = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate() + 1);
+    const localISODate = function(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; };
+    orderDateInput.min = localISODate(todayLocal);
+    orderDateInput.value = localISODate(tomorrowLocal);
+    orderTimeInput.value = '15:00';
+    deliveryTypeInput.addEventListener('change', function() {
+      const delivery = deliveryTypeInput.value === 'delivery';
+      document.getElementById('address-field').hidden = !delivery;
+      document.getElementById('schedule-address').required = delivery;
+    });
+    bookingForm.addEventListener('submit', submitBooking);
     document.getElementById('send-order').addEventListener('click', sendOrderToWhatsApp);
     document.getElementById('quick-order').addEventListener('click', sendOrderToWhatsApp);
     updateFilters();
