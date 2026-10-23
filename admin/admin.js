@@ -142,6 +142,24 @@
     renderOrders();
   }
 
+  async function createMobilePairing() {
+    const button = $('#create-mobile-pairing');
+    button.disabled = true;
+    button.textContent = 'Gerando código…';
+    try {
+      const result = await request('/api/admin/mobile-pairing', { method: 'POST', body: '{}' });
+      $('#mobile-pairing-code').textContent = result.code;
+      $('#mobile-pairing-expiry').textContent = `Digite este código no aplicativo. Ele expira às ${new Date(result.expiresAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`;
+      $('#mobile-pairing-card').classList.remove('hidden');
+      setMessage($('#app-message'), 'Código do aplicativo gerado com segurança.', 'success');
+    } catch (error) {
+      setMessage($('#app-message'), error.message, 'error');
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Conectar aplicativo ↗';
+    }
+  }
+
   function renderOrders() {
     const today = localDateKey();
     const active = orders.filter((order) => !['Entregue', 'Cancelado'].includes(order.stage));
@@ -461,6 +479,17 @@
     try { await loadOrders(); setMessage($('#app-message'), 'Agenda atualizada.', 'success'); }
     catch (error) { setMessage($('#app-message'), error.message, 'error'); }
     finally { button.disabled = false; button.textContent = '↻ Atualizar'; }
+  });
+  $('#create-mobile-pairing').addEventListener('click', createMobilePairing);
+  $('#copy-mobile-pairing').addEventListener('click', async () => {
+    const code = $('#mobile-pairing-code').textContent.trim();
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      notify('Código copiado.');
+    } catch {
+      setMessage($('#app-message'), 'Não foi possível copiar automaticamente. Anote o código mostrado no painel.', 'error');
+    }
   });
   $('#order-search').addEventListener('input', renderOrders);
   $('#order-status-filter').addEventListener('change', renderOrders);

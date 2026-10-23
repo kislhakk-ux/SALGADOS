@@ -203,6 +203,11 @@ function adminDevices() {
   return firestore.collection(deviceCollectionName);
 }
 
+function mobilePairings() {
+  if (!firestore) database();
+  return firestore.collection('mobilePairings');
+}
+
 function limitPublicOrder(ip) {
   const now = Date.now();
   const recent = (publicOrderAttempts.get(ip) || []).filter((time) => now - time < 15 * 60 * 1000);
@@ -404,6 +409,40 @@ app.post('/api/admin/mobile-login', async (req, res) => {
     res.set('Cache-Control', 'no-store').json({ token: createToken(lifetime), expiresIn: lifetime / 1000 });
   } catch (error) {
     res.status(error.status || 503).json({ error: error.status ? error.message : 'O banco da agenda não está disponível.' });
+  }
+});
+
+app.post('/api/admin/mobile-pairing', requireAdmin, async (_req, res) => {
+  try {
+    const code = String(crypto.randomInt(10_000_000, 100_000_000));
+    const createdAt = Date.now();
+    const codeHash = crypto.createHash('sha256').update(code).digest('hex');
+    await mobilePairings().doc(codeHash).create({ createdAt, expiresAt: createdAt + 10 * 60 * 1000 });
+    res.set('Cache-Control', 'no-store').json({ code, expiresAt: createdAt + 10 * 60 * 1000 });
+  } catch (error) {
+    res.status(error.status || 503).json({ error: error.status ? error.message : 'Não foi possível gerar o código do aplicativo.' });
+  }
+});
+
+app.post('/api/admin/mobile-pairing/redeem', async (req, res) => {
+  const ip = req.ip || 'unknown';
+  if (!checkLoginLimit(ip)) return res.status(429).json({ error: 'Muitas tentativas. Aguarde 15 minutos e tente novamente.' });
+  const code = String(req.body?.code || '').replace(/\D/g, '');
+  if (!/^\d{8}$/.test(code)) return res.status(400).json({ error: 'Digite o código de 8 números gerado no painel.' });
+  try {
+    const codeHash = crypto.createHash('sha256').update(code).digest('hex');
+    const reference = mobilePairings().doc(codeHash);
+    const result = await firestore.runTransaction(async (transaction) => {
+      const pairing = await transaction.get(reference);
+      if (!pairing.exists || pairing.data().expiresAt <= Date.now()) return null;
+      transaction.delete(reference);
+      const lifetime = 30 * 24 * 60 * 60 * 1000;
+      return { token: createToken(lifetime), expiresIn: lifetime / 1000 };
+    });
+    if (!result) return res.status(401).json({ error: 'Código inválido ou expirado. Gere outro no painel.' });
+    res.set('Cache-Control', 'no-store').json(result);
+  } catch (error) {
+    res.status(error.status || 503).json({ error: error.status ? error.message : 'Não foi possível conectar o aplicativo à agenda.' });
   }
 });
 

@@ -50,7 +50,8 @@
       </nav>
 
       <section id="orders-workspace" aria-labelledby="orders-title">
-        <div class="orders-heading"><div><span class="eyebrow">Agenda compartilhada</span><h2 id="orders-title">Pedidos e agendamentos</h2><p>Os pedidos feitos na loja aparecem aqui e no aplicativo Agenda Nane.</p></div><button id="refresh-orders" class="secondary" type="button">↻ Atualizar</button></div>
+        <div class="orders-heading"><div><span class="eyebrow">Agenda compartilhada</span><h2 id="orders-title">Pedidos e agendamentos</h2><p>Os pedidos feitos na loja aparecem aqui e no aplicativo Agenda Nane.</p></div><div class="orders-heading-actions"><button id="create-mobile-pairing" class="secondary" type="button">Conectar aplicativo ↗</button><button id="refresh-orders" class="secondary" type="button">↻ Atualizar</button></div></div>
+        <div id="mobile-pairing-card" class="mobile-pairing-card hidden" role="status" aria-live="polite"><div><strong>Conecte o Agenda Nane</strong><p id="mobile-pairing-expiry">Digite este código no aplicativo. Ele expira em 10 minutos.</p></div><output id="mobile-pairing-code" aria-label="Código para conectar o aplicativo"></output><button id="copy-mobile-pairing" class="secondary" type="button">Copiar código</button></div>
         <div class="order-stats">
           <article class="order-stat"><small>Pedidos ativos</small><strong id="order-stat-open">0</strong></article>
           <article class="order-stat"><small>Para hoje</small><strong id="order-stat-today">0</strong></article>
