@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95310848875",
+    "project_id": "nane-salgados-agenda",
+    "storage_bucket": "nane-salgados-agenda.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95310848875:android:b0c63d48d4ba13f7dde22e",
+        "android_client_info": {
+          "package_name": "com.nane.agenda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0xera9Iowxha8pcJBJ1MyWzqtu2ORIPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
